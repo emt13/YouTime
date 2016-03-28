@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   var checkPageButton = document.getElementById('checkPage');
-  checkPageButton.addEventListener('click', function() {
-
+  checkPageButton.addEventListener('click', function(){
     chrome.tabs.getSelected(null, function(tab) {
       d = document;
 
@@ -16,5 +15,27 @@ document.addEventListener('DOMContentLoaded', function() {
       d.body.appendChild(f);
       f.submit();
     });
+  }, false);
+
+  //save button code
+  var saveButton = document.getElementById('saveButton');
+  saveButton.addEventListener('click', function(){
+    var elem = document.getElementById('saveButton');
+    if(elem.value == 'Save'){
+      elem.value='Saved :)';
+      return;
+    }
+    elem.value = 'Save';
+  }, false);
+
+  //edit button code
+  var editButton = document.getElementById('editButton');
+  editButton.addEventListener('click', function(){
+    var elem = document.getElementById('editButton');
+    if(elem.value == 'Edit'){
+      elem.value='Edited! :)';
+    }else{
+      elem.value = 'Edit';
+    }
   }, false);
 }, false);
