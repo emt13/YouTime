@@ -21,7 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
   var extractButton = document.getElementById('extractButton');
   extractButton.addEventListener('click', function(){
     var extractField = document.getElementById('extractField');
-    extractField.value = "www.youtube.com";
+    chrome.tabs.query({
+      active: true,
+      lastFocusedWindow: true
+    }, function(arr) {
+      var tab = arr[0];
+      var url = tab.url;
+      extractField.value=tab.url;
+    });
   }, false);
 
   //save button code
