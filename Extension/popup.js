@@ -17,25 +17,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, false);
 
+  //extract button code. extracts url and puts in text field
+  var extractButton = document.getElementById('extractButton');
+  extractButton.addEventListener('click', function(){
+    var extractField = document.getElementById('extractField');
+    extractField.value = "www.youtube.com";
+  }, false);
+
   //save button code
   var saveButton = document.getElementById('saveButton');
   saveButton.addEventListener('click', function(){
-    var elem = document.getElementById('saveButton');
-    if(elem.value == 'Save'){
-      elem.value='Saved :)';
+    if(saveButton.value == 'Save'){
+      saveButton.value='Saved :)';
       return;
     }
-    elem.value = 'Save';
+    saveButton.value = 'Save';
   }, false);
 
   //edit button code
   var editButton = document.getElementById('editButton');
   editButton.addEventListener('click', function(){
-    var elem = document.getElementById('editButton');
-    if(elem.value == 'Edit'){
-      elem.value='Edited! :)';
+    if(editButton.value == 'Edit'){
+      editButton.value='Edited! :)';
     }else{
-      elem.value = 'Edit';
+      editButton.value = 'Edit';
     }
   }, false);
 }, false);
