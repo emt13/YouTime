@@ -5,6 +5,10 @@
     <script src="popup.js"></script>
     <!-- Use this area in head to add style sheets -->
     <style>
+      body {
+        min-width:300px;
+        min-height:120px;
+      }
 
     </style>
   </head>
@@ -13,15 +17,15 @@
       <h2>YouTime</h2>
     </header>
     <section>
-      <button id="checkPage">Check this page now!</button>
+      Name:
+      <input type="text" id="extractField" value="test" disabled="true"></input>
+      <p></p>
       <fieldset>
         <legend>Save/Edit</legend>
         <input type="button" id="saveButton" value="Save"></input>
         <input type="button" id="editButton" value="Edit"></input>
         <input type="button" id="extractButton" value="Extract"></input>
       </fieldset>
-      <h3>URL<h3>
-      <input type="text" id="extractField" value="test"></input>
     </section>
   </body>
 </html>
