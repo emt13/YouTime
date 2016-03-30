@@ -4,22 +4,50 @@
     <title>YouTime</title>
     <script src="popup.js"></script>
     <!-- Use this area in head to add style sheets -->
-    <style>
+    <style type="text/css">
+      header {
+        background-color: transparent;
+      }
       body {
+        background-color: #d1c7c7;
+        background-image: url(/Images/cream-paper.textClipping);
         min-width:300px;
         min-height:120px;
+      }
+
+      #timeField {
+        background: transparent;
+        color: Black;
+        font-size: 14px;
+        border: solid;
+        border-width: 1px;
+      }
+
+      #extractField {
+        background: transparent;
+        color: Black;
+        border: none;
+        outline: none;
+        font-size: 14px;
       }
 
     </style>
   </head>
   <body>
+    <!-- COLORS -->
+    <!-- d1c7c7 -->
+    <!-- -->
     <header>
-      <h2>YouTime</h2>
+      <h2><font color="red">You</font>Time</h2>
     </header>
     <section>
-      Name:
+      <font size="3">Name:</font>
       <input type="text" id="extractField" value="test" disabled="true"></input>
       <p></p>
+      <font size="3">Description:</font>
+      <input type="text" id="timeField" value="5:10:25" disabled="true"></input>
+      <input type="text" id="descField"></input>
+
       <fieldset>
         <legend>Save/Edit</legend>
         <input type="button" id="saveButton" value="Save"></input>
