@@ -1,59 +1,52 @@
 <!doctype html>
+<!--
+  This html file describes the main popup when
+  left-clicking the YouTime icon.
+  -->
 <html>
   <head>
     <title>YouTime</title>
     <script src="popup.js"></script>
-    <!-- Use this area in head to add style sheets -->
-    <style type="text/css">
-      header {
-        background-color: transparent;
-      }
-      body {
-        background-color: #d1c7c7;
-        background-image: url(/Images/cream-paper.textClipping);
-        min-width:300px;
-        min-height:120px;
-      }
-
-      #timeField {
-        background: transparent;
-        color: Black;
-        font-size: 14px;
-        border: solid;
-        border-width: 1px;
-      }
-
-      #extractField {
-        background: transparent;
-        color: Black;
-        border: none;
-        outline: none;
-        font-size: 14px;
-      }
-
-    </style>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <!-- COLORS -->
-    <!-- d1c7c7 -->
-    <!-- -->
-    <header>
-      <h2><font color="red">You</font>Time</h2>
-    </header>
-    <section>
-      <font size="3">Name:</font>
-      <input type="text" id="extractField" value="test" disabled="true"></input>
-      <p></p>
-      <font size="3">Description:</font>
-      <input type="text" id="timeField" value="5:10:25" disabled="true"></input>
-      <input type="text" id="descField"></input>
+    Timestamp added!
+    <form>
+      <table>
+        <tr>
+          <td>
+            <label for="nameField">Name:</label>
+          </td>
+          <td>
+            <input type="text" id="nameField" disabled>
+          </td>
+        </tr>
 
-      <fieldset>
-        <legend>Save/Edit</legend>
-        <input type="button" id="saveButton" value="Save"></input>
-        <input type="button" id="editButton" value="Edit"></input>
-        <input type="button" id="extractButton" value="Extract"></input>
-      </fieldset>
-    </section>
+        <tr>
+          <td>
+            <label for="folderField">Folder:</label>
+          </td>
+          <td>
+            <input type="text" id="folderField" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <label for="descriptionField">Description:</label>
+          </td>
+          <td>
+            <input type="text" id="descriptionField" disabled>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2">
+            <input type="button" id="managerButton" value="Manager">
+            <input type="button" id="doneButton" value="Done">
+          </td>
+        </tr>
+      </table>
+    </form>
   </body>
 </html>
