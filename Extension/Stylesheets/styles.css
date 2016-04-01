@@ -1,0 +1,100 @@
+body {
+    min-width: 250px;
+    margin: 0px;
+    font-family: Segoe UI, Arial, sans-serif;
+    font-size: 13px;
+    color: #e60000;
+    background-image: url(/Images/background_5_246x220.png);
+    background-color: transparent;
+    background-position: right bottom;
+    background-size: 48%;
+    background-repeat: no-repeat;
+}
+
+header {
+    display: block;
+    background-color: #e60000;
+    padding: 0.01em 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin: 10px 0em;
+}
+
+h1 {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+th, td {
+    padding: 5px;
+}
+
+input.text {
+    display: block;
+    border: 1px solid #999999;
+}
+
+input.text:disabled {
+    background-color: #e6e6e6;
+}
+
+input.text:focus {
+    border: 1px solid #ffa500;
+    outline: 0.5px solid #ffa500;
+}
+
+input.button {
+    border: none;
+    display: inline-block;
+    outline: 0px;
+    padding: 4px 8px;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #e60000;
+}
+
+input.button:hover {
+    box-shadow: 2px 4px 2px 0 rgba(0,0,0,0.2);
+}
+
+.divider {
+    width: 5px;
+    height: auto;
+    display: inline-block;
+}
+
+#top, #bottom, #left, #right {
+    background: #e60000;
+    position: fixed;
+}
+
+#left, #right {
+    top: 0; bottom: 0;
+    width: 5px;
+}
+#left { left: 0; }
+#right { right: 0; }
+
+#top, #bottom {
+    left: 0; right: 0;
+    height: 5px;
+}
+#top { top: 0; }
+#bottom { bottom: 0; }
+
+#timeField {
+    background: transparent;
+    color: Black;
+    font-size: 14px;
+    border: solid;
+    border-width: 1px;
+}
