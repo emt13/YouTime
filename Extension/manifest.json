@@ -10,6 +10,19 @@
     "128": "Images/icon64.png"
   },
 
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+
+  "permissions": [
+    "tabs",
+    "https://*/*",
+    "http://*/*",
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "bookmarks"
+  ],
   "browser_action": {
     "default_icon": {
       "32": "Images/icon32.png"
@@ -18,9 +31,14 @@
     "default_popup": "popup.html"
   },
 
-  "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/",
-    "bookmarks"
-  ]
+  "content_scripts": [{
+      "matches": [
+        "http://www.youtube.com/watch?*",
+        "https://www.youtube.com/watch?*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+  }]
 }

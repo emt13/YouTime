@@ -1,66 +1,30 @@
-var TIME_DESC_WIDTH = 29;
+console.log("popup.js seen");
 
-function setURL(document, field){
-  chrome.tabs.query({
-    active: true,
-    lastFocusedWindow: true
-  }, function(arr) {
-    var tab = arr[0];
-    field.value = tab.url;
+//ping YouTube with the YTgetTitle message
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  //send the active tab a message asking for the title of the video
+  chrome.tabs.sendMessage(tabs[0].id, {action: "YTgetTitle"}, function(response) {
+    console.log(response);
+    //set the value in the popup.html
+    document.getElementById('nameField').value = response;
   });
-}
+});
 
-function descriptionSizing(document){
-  var timeField = document.getElementById('timeField');
-  var descField = document.getElementById('descField');
-  var elem = timeField.value;
-  timeField.size = timeField.value.length;
-  descField.size = TIME_DESC_WIDTH - timeField.size;
-  descField.value = descField.size + ' - ' + timeField.size;
-}
+//ping YouTube with the YTgetTime message
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  //send the active tab a message asking for the title of the video
+  chrome.tabs.sendMessage(tabs[0].id, {action: "YTgetTime"}, function(response) {
+    console.log(response);
+    //set the value in the popup.html
+    document.getElementById('descriptionField').value = response;
+  });
+});
 
-document.addEventListener('DOMContentLoaded', function() {
-  descriptionSizing(document);
-  var extractField = document.getElementById('extractField');
-  setURL(document, extractField);
-
-
-  //var extractField = document.getElementById('extractField');
-  //extractField.value = getURL();
-
-  //extract button code. extracts url and puts in text field
-  /*var extractButton = document.getElementById('extractButton');
-  extractButton.addEventListener('click', function(){
-    var extractField = document.getElementById('extractField');
-    //gets the active tab
-    chrome.tabs.query({
-      active: true,
-      lastFocusedWindow: true
-    }, function(arr) {
-      //using this to set the text field to the url
-      var tab = arr[0];
-      var url = tab.url;
-      extractField.value=tab.url;
-    });
-  }, false);
-
-  //save button code
-  var saveButton = document.getElementById('saveButton');
-  saveButton.addEventListener('click', function(){
-    if(saveButton.value == 'Save'){
-      saveButton.value='Saved :)';
-      return;
-    }
-    saveButton.value = 'Save';
-  }, false);
-
-  //edit button code
-  var editButton = document.getElementById('editButton');
-  editButton.addEventListener('click', function(){
-    if(editButton.value == 'Edit'){
-      editButton.value='Edited! :)';
-    }else{
-      editButton.value = 'Edit';
-    }
-  }, false);*/
-}, false);
+//in progress!
+//ping YouTube with the YTgetPercentDone message
+/*chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  chrome.tabs.sendMessage(tabs[0].id, {action: "YTgetPercentDone"}, function(response) {
+    console.log(response);
+    document.getElementById('folderField').value = response;
+  });
+});*/
