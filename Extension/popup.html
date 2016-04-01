@@ -2,48 +2,65 @@
 <!--
   This html file describes the main popup when
   left-clicking the YouTime icon.
+  TODO:
+  Update CSS for <select> tag
+  Fix text box padding
   -->
 <html>
   <head>
     <title>YouTime</title>
-    <script src="popup.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <script src="Scripts/popup.js"></script>
+    <link rel="stylesheet" href="Stylesheets/styles.css">
+    <!--[if lte IE 6]>
+      <style>#top, #bottom, #left, #right { display: none; }</style>
+    <![endif]-->
   </head>
   <body>
-    Timestamp added!
+    <!-- Header -->
+    <header>
+      <h1 id="actionHeader">Timestamp added!</h1>
+    </header>
+
+    <!-- Main form -->
     <form>
       <table>
         <tr>
           <td>
-            <label for="nameField">Name:</label>
+            <label for="nameField">Name</label>
           </td>
           <td>
-            <input type="text" id="nameField" disabled>
+            <input type="text" id="nameField" class="text" disabled>
           </td>
         </tr>
 
         <tr>
           <td>
-            <label for="folderField">Folder:</label>
+            <label for="folderField">Folder</label>
           </td>
           <td>
-            <input type="text" id="folderField" disabled>
+            <select id="folderField">
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
+              <option value="3">Option 3</option>
+            </select>
           </td>
         </tr>
 
         <tr>
           <td>
-            <label for="descriptionField">Description:</label>
+            <label for="descriptionField">Description</label>
           </td>
           <td>
-            <input type="text" id="descriptionField" disabled>
+            <input type="text" id="descriptionField" class="text">
           </td>
         </tr>
 
         <tr>
-          <td colspan="2">
-            <input type="button" id="managerButton" value="Manager">
-            <input type="button" id="doneButton" value="Done">
+          <td>
+            <input type="button" id="managerButton" class="button" value="Manager">
+          </td>
+          <td>
+            <input type="button" id="doneButton" class="button" value="Done">
           </td>
         </tr>
       </table>
