@@ -13,6 +13,10 @@ function getTime(){
   return -1;
 }
 
+function pauseVideo(){
+  console.log("...pausing video!");
+}
+
 //working on this function to get the percent done
 /*function getPercentDone(){
   var ytplayer = getYTPlayer();
@@ -26,7 +30,11 @@ function getTime(){
 //listeners that are installed in the YouTube video page
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse){
+    console.log(" - " + message.action);
     switch(message.action){
+      case "YTpauseVideo":
+        pauseVideo();
+        break;
       case "YTgetPercentDone":
         //sends a message back to the sender
         sendResponse(getPercentDone());

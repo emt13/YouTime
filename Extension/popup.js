@@ -1,5 +1,14 @@
 console.log("popup.js seen");
 
+//ping YouTube with a pause message
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  console.log("sending pause");
+  //send the active tab a message trying to pause the video
+  chrome.tabs.sendMessage(tabs[0].id, {action: "YTpauseVideo"}, function(response) {
+    console.log(response);
+  });
+});
+
 //ping YouTube with the YTgetTitle message
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   //send the active tab a message asking for the title of the video
@@ -19,12 +28,3 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     document.getElementById('descriptionField').value = response;
   });
 });
-
-//in progress!
-//ping YouTube with the YTgetPercentDone message
-/*chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  chrome.tabs.sendMessage(tabs[0].id, {action: "YTgetPercentDone"}, function(response) {
-    console.log(response);
-    document.getElementById('folderField').value = response;
-  });
-});*/

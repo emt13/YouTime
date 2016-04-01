@@ -12,7 +12,7 @@
 
   "background": {
     "persistent": false,
-    "scripts": ["background.js"]
+    "scripts": ["jquery-2.2.2.min.js","background.js"]
   },
 
   "permissions": [
@@ -37,8 +37,9 @@
         "https://www.youtube.com/watch?*"
       ],
       "js": [
+        "jquery-2.2.2.min.js",
         "content.js"
       ],
-      "run_at": "document_end"
+      "run_at": "document_start"
   }]
 }
