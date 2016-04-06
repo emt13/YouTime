@@ -21,3 +21,6 @@ EF.pauseVideo();
 EF.getTitle( setTitle );
 //gets the time and handles it according to the callback function provided
 EF.getTime( setTime );
+
+var ret = EF.getVideoID();
+console.log(" video id: " + ret);

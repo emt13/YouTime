@@ -32,3 +32,12 @@ EventFacade.prototype.getTitle = function( callback )
 {
   this.sendEvent("YTgetTitle", callback);
 }
+
+EventFacade.prototype.getVideoID = function( callback )
+{
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    var videoURL = tabs[0].url;
+    var indexOfEq = videoURL.
+    callback(videoURL.substring())
+  });
+}
