@@ -20,6 +20,10 @@ function setTime(val){
   document.getElementById('descriptionField').value = val;
 }
 
+function useVideoID(val){
+  console.log(" video id: " + val);
+}
+
 //************************
 
 //creation of teh EventFacade class
@@ -32,6 +36,4 @@ EF.getTitle( setTitle );
 //gets the time and handles it according to the callback function provided
 EF.getTime( setTime );
 
-EF.getVideoID(function(val){
-  console.log(" video id: " + val);
-});
+EF.getVideoID( useVideoID );

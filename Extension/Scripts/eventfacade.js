@@ -35,8 +35,11 @@ EventFacade.prototype.getTitle = function( callback )
 
 EventFacade.prototype.getVideoID = function( callback )
 {
+  //queries the tabs for the active, current one
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     var videoURL = tabs[0].url;
-    callback(videoURL);
+    var indOfEq = videoURL.indexOf("=");
+    //sends the video id to the callback
+    callback(videoURL.substring(indOfEq + 1, videoURL.length));
   });
 }
