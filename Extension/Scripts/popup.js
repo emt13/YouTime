@@ -10,31 +10,28 @@
  * @since 2016-04-01
  */
 
-// Ping YouTube with a pause message, YTpauseVideo
-chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {
-  console.log("sending pause");
-  // Send the active tab a message trying to pause the video
-  chrome.tabs.sendMessage( tabs[0].id, {action: "YTpauseVideo"}, function(response) {
-    console.log(response);
-  });
-});
+//sets the nameField to the value
+function setTitle(val){
+  document.getElementById('nameField').value = val;
+}
 
-// Ping YouTube with the title message, YTgetTitle
-chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {
-  // Send the active tab a message asking for the title of the video
-  chrome.tabs.sendMessage( tabs[0].id, {action: "YTgetTitle"}, function(response) {
-    console.log(response);
-    // Set the value in the popup.html
-    document.getElementById( "nameField" ).value = response;
-  });
-});
+//sets the description field to a value
+function setTime(val){
+  document.getElementById('descriptionField').value = val;
+}
 
-// Ping YouTube with the time message, YTgetTime
-chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {
-  // Send the active tab a message asking for the title of the video
-  chrome.tabs.sendMessage( tabs[0].id, {action: "YTgetTime"}, function(response) {
-    console.log(response);
-    // Set the value in the popup.html
-    document.getElementById( "descriptionField" ).value = response;
-  });
+//************************
+
+//creation of teh EventFacade class
+var EF = new EventFacade();
+
+//pauses a video
+EF.pauseVideo();
+//gets the title and handles it according to the callback function provided
+EF.getTitle( setTitle );
+//gets the time and handles it according to the callback function provided
+EF.getTime( setTime );
+
+EF.getVideoID(function(val){
+  console.log(" video id: " + val);
 });
