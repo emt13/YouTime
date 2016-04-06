@@ -1,10 +1,11 @@
 <!doctype html>
 <!--
-  This html file describes the main popup when
+  This HTML file describes the main popup when
   left-clicking the YouTime icon.
-  TODO:
-  Update CSS for <select> tag
-  Fix text box padding
+
+  @author YouTime
+  @version 1.0
+  @since 2016-04-01
   -->
 <html>
   <head>
@@ -24,15 +25,18 @@
     <!-- Main form -->
     <form>
       <table>
+
+        <!-- Video name -->
         <tr>
           <td>
             <label for="nameField">Name</label>
           </td>
           <td>
-            <input type="text" id="nameField" class="text" value="" disabled></input>
+            <input type="text" id="nameField" class="text" value="" disabled>
           </td>
         </tr>
 
+        <!-- Folder selection -->
         <tr>
           <td>
             <label for="folderField">Folder</label>
@@ -46,21 +50,23 @@
           </td>
         </tr>
 
+        <!-- User-defined description -->
         <tr>
           <td>
             <label for="descriptionField">Description</label>
           </td>
           <td>
-            <input type="text" id="descriptionField" class="text" value=""></input>
+            <input type="text" id="descriptionField" class="text" value="">
           </td>
         </tr>
 
+        <!-- Bottom buttons -->
         <tr>
           <td>
-            <input type="button" id="managerButton" class="button" value="Manager"></input>
+            <input type="button" id="managerButton" class="button" value="Manager">
           </td>
           <td>
-            <input type="button" id="doneButton" class="button" value="Done"></input>
+            <input type="button" id="doneButton" class="button" value="Done">
           </td>
         </tr>
       </table>

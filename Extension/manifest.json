@@ -12,7 +12,10 @@
 
   "background": {
     "persistent": false,
-    "scripts": ["Scripts/jquery-2.2.2.min.js","Scripts/background.js"]
+    "scripts": [
+      "Scripts/jquery-2.2.2.min.js",
+      "Scripts/background.js"
+    ]
   },
 
   "permissions": [
@@ -23,6 +26,7 @@
     "https://ajax.googleapis.com/",
     "bookmarks"
   ],
+
   "browser_action": {
     "default_icon": {
       "32": "Images/icon32.png"

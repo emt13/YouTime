@@ -1,3 +1,13 @@
+/**
+ * This is the stylesheet for the HTML which
+ * makes everything look prettier.
+ *
+ * @author YouTime
+ * @version 1.0
+ * @since 2016-04-01
+ */
+
+/* Main HTML body style */
 body {
     min-width: 250px;
     margin: 0px;
@@ -11,46 +21,65 @@ body {
     background-repeat: no-repeat;
 }
 
+/* Header contains the headings */
 header {
     display: block;
     background-color: #e60000;
     padding: 0.01em 16px;
 }
 
+/* Heading style */
 h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     margin: 10px 0em;
 }
 
+/* Main heading style */
 h1 {
     font-size: 16px;
     color: #ffffff;
 }
 
+/* Needed for input labels */
 label {
     font-size: 12px;
     font-weight: 500;
 }
 
+/* Needed for table entries */
 th, td {
     padding: 5px;
 }
 
-input.text {
+/* Folder selection */
+select {
+  min-width: 100%;
+  display: block;
+  border: 1px solid #999999;
+}
+
+select:focus {
+  border: 1px solid #ffa500;
+  outline: none;
+}
+
+/* Input style for buttons and text boxes */
+input[type="text"] {
     display: block;
     border: 1px solid #999999;
+    padding: 1px 4px;
 }
 
-input.text:disabled {
-    background-color: #e6e6e6;
+input[type="text"]:disabled {
+    background-color: #f2f2f2;
 }
 
-input.text:focus {
+input[type="text"]:focus {
     border: 1px solid #ffa500;
-    outline: 0.5px solid #ffa500;
+    outline: none;
 }
 
-input.button {
+input[type="button"] {
     border: none;
     display: inline-block;
     outline: 0px;
@@ -62,7 +91,7 @@ input.button {
     background-color: #e60000;
 }
 
-input.button:hover {
+input[type="button"]:hover {
     box-shadow: 2px 4px 2px 0 rgba(0,0,0,0.2);
 }
 
@@ -72,6 +101,7 @@ input.button:hover {
     display: inline-block;
 }
 
+/* Border that can be used */
 #top, #bottom, #left, #right {
     background: #e60000;
     position: fixed;
@@ -90,11 +120,3 @@ input.button:hover {
 }
 #top { top: 0; }
 #bottom { bottom: 0; }
-
-#timeField {
-    background: transparent;
-    color: Black;
-    font-size: 14px;
-    border: solid;
-    border-width: 1px;
-}
