@@ -1,4 +1,14 @@
-console.log("popup.js seen");
+/**
+ * This is the script injected into popup.html
+ * via a dynamic <script> tag. It serves as
+ * the main entry point to the extension logic.
+ * It does not have access to any of the
+ * chrome.* APIs.
+ *
+ * @author YouTime
+ * @version 1.0
+ * @since 2016-04-01
+ */
 
 //sets the nameField to the value
 function setTitle(val){
@@ -22,5 +32,6 @@ EF.getTitle( setTitle );
 //gets the time and handles it according to the callback function provided
 EF.getTime( setTime );
 
-var ret = EF.getVideoID();
-console.log(" video id: " + ret);
+EF.getVideoID(function(val){
+  console.log(" video id: " + val);
+});
