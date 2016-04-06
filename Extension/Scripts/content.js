@@ -9,7 +9,7 @@ function getYTPlayer(){
 function getTime(){
   var ytplayer = getYTPlayer();
   if(ytplayer != null){
-    return document.getElementsByClassName('ytp-progress-bar')[0].attributes[6].value;
+    return document.getElementsByTagName("video")[0].currentTime;
   }
   return -1;
 }
