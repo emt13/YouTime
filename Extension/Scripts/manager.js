@@ -11,7 +11,27 @@
  * @since 2016-04-06
  */
  
-$(".share").on("click", function(e) {
-    e.preventDefault();
-    $(this).parent().remove();
+ var timemarks = []
+ 
+function addTimemark(tm) {
+  timemarks.push(tm);
+}
+
+function populateList() {
+  var tmlist = document.getElementById("timestampList");
+  for (i = 0; i < timemarks.length; i++) {
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    var tm = timemarks[i];
+    a.setAttribute("href", tm.url);
+    li.appendChild(a);
+    var hyperlink = tm.title & " - " & tm.time;
+    li.appendChild(document.createTextNode());
+    tmlist.appendChild(li);
+    console.log("test");
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  populateList();
 });

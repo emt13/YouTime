@@ -163,6 +163,7 @@ function saveInfo(){
   }
   var currentURL = buildURL(time,url);
   tm = new Timemark(id, title, time, currentURL);
+  addTimemark(tm);
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 }
 

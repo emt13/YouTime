@@ -58,7 +58,7 @@ EventFacade.prototype.getVideoID = function( callback )
   });
 }
 
-EventFacade.protoype.getURL = function( callback )
+EventFacade.prototype.getURL = function( callback )
 {
   //queries the tabs for the active, current one
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
