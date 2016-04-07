@@ -10,31 +10,26 @@
 
 class Timemark {
 
-  constructor() {
-    this.id = -1;
-    this.title = "";
-    this.time = -1;
+  /*
+   * Constructor.
+   */
+  constructor(id, title, time, url) {
+    this.id = id;
+    this.title = title;
+    this.time = time;
     this.description = "";
-    this.url = "";
+    this.url = url;
   }
 
   getId() { return this.id; }
 
-  setId(val) { this.id = val; }
-
   getTitle() { return this.title; }
 
-  setTitle(val) { this.title = val; }
-
   getTime() { return this.time; }
-
-  setTime(val) { this.time = val; }
 
   getDescription() { return this.description; }
 
   setDescription(val) { this.description = val; }
 
   getUrl() { return this.url; }
-
-  setUrl(val) { this.url = val; }
  }
