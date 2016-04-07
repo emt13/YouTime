@@ -10,7 +10,7 @@
  * @version 1.0
  * @since 2016-04-06
  */
-
+/*
 function populatePage(allKeys){
   for(i = 0; i < allKeys.length; i++){
     chrome.storage.sync.get(allKeys[i], function(items){
@@ -25,24 +25,27 @@ function populatePage(allKeys){
     });
   }
 }
+*/
+//chrome.storage.sync.get(null, function(items){
+//  var allKeys = Object.keys(items);
+//  console.log(allKeys);
 
-chrome.storage.sync.get(null, function(items){
-  var allKeys = Object.keys(items);
-  console.log(allKeys);
+  //populatePage(allKeys);
 
-  populatePage(allKeys);
+//});
 
-});
- 
- var timemarks = []
- 
-function addTimemark(tm) {
-  timemarks.push(tm);
-}
+ //var timemarks = []
 
-function populateList() {
+//function addTimemark(tm) {
+//  timemarks.push(tm);
+//}
+
+function populateList(timemarks) {
+  console.log(timemarks);
   var tmlist = document.getElementById("timestampList");
-  for (i = 0; i < timemarks.length; i++) {
+  for(i = 0; i < allKeys.length; i++){
+    var sortedKeys = Object.keys(timemarks).sort();
+    console.log(" obj: " + timemarks[sortedKeys]);
     var li = document.createElement("li");
     var a = document.createElement("a");
     var tm = timemarks[i];
@@ -52,9 +55,17 @@ function populateList() {
     li.appendChild(document.createTextNode());
     tmlist.appendChild(li);
     console.log("test");
-  }
+  }*/
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  populateList();
+  /*chrome.storage.sync.get(null, function(items){
+    var allKeys = Object.keys(items);
+    console.log(allKeys);
+
+    populatePage(allKeys);
+
+  });*/
+  chrome.storage.sync.get(null, populateList);
 });

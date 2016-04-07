@@ -148,7 +148,7 @@ function saveInfo(){
   }
   var currentURL = buildURL(time,url);
   tm = new Timemark(id, title, time, currentURL);
-  addTimemark(tm);
+  //addTimemark(tm);
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 
   //var idStr = '' + id;
@@ -168,9 +168,9 @@ function saveInfo(){
 
 saveInfo(); //thread created
 
-var st = new Storage();
+//var st = new Storage();
 
-saveTimemark(st, tm);
+//saveTimemark(st, tm);
 
 /*setTimeout(function(){
   console.log("title: " + title + " | time: " + time);
