@@ -14,6 +14,7 @@ var title = "swag";
 var time = "swag";
 var desc = "swag";
 var id = "swag";
+var url = "swag";
 
 /**
  * Sets the name field to the value.
@@ -50,7 +51,7 @@ function useVideoID(val) {
  * @param the video url
  */
 function videoURL(val) {
-  return val;
+  url = val;
 }
 
 /**
@@ -134,29 +135,30 @@ EF.getTime( setTime );
 EF.getVideoID( useVideoID );
 
 // Get video URL
-var url = EF.getURL( videoURL );
+EF.getURL( videoURL );
 
 //Builds current time URL by convert HH:MM:SS format to seconds and
 //concat it to the video url.
 function buildURL(time,url) {
   var t = time.split(':');
   var seconds;
-  if(t.length() == 3) {
+  if(t.length == 3) {
      seconds = t[0]*3600+t[1]*60+t[2]*1;
   }
-  else if(t.length() == 2) {
+  else if(t.length == 2) {
     seconds = t[0]*60+t[1]*1;
   }
   var newURL = url;
-  newURL.concat('&');
-  newURL.concat(seconds);
+  newURL = newURL.concat('&');
+  newURL = newURL.concat(seconds);
+  console.log(" newURL = " + newURL);
   return newURL;
 }
 
 var tm;
 
 function saveInfo(){
-  if(title == "swag" || time == "swag" || id == "swag" || desc == "swag"){
+  if(title == "swag" || time == "swag" || id == "swag" || desc == "swag" || url == "swag"){
     console.log(" -!- timing out for 1ms...");
     setTimeout(saveInfo, 1);
     return;
@@ -168,7 +170,7 @@ function saveInfo(){
   //var idStr = '' + id;
 
   var obj = {};
-  obj[id] = [title, time, id];
+  obj[id] = [title, time, currentURL];
 
   chrome.storage.sync.set(obj, function(){
     console.log("saved shit");
@@ -177,7 +179,6 @@ function saveInfo(){
     });
   });
 
-  chrome.storage.sync.get({ })
   //console.log(" manager.html: " + chrome.extension.getURL('manager.html'));
 }
 
