@@ -10,28 +10,49 @@
  * @since 2016-04-01
  */
 
-//sets the nameField to the value
-function setTitle(val){
-  document.getElementById('nameField').value = val;
+/**
+ * Sets the name field to the value.
+ * @param title
+ */
+function setTitle(val) {
+  document.getElementById( "nameField" ).value = val;
+  timemark.setTitle( val );
+  console.log( "timemark = " + timemark.getTitle() );
 }
 
-//sets the description field to a value
-function setTime(val){
-  document.getElementById('descriptionField').value = val;
+/**
+ * Sets the description field to the value.
+ * @param description
+ */
+function setTime(val) {
+  document.getElementById( "descriptionField" ).value = val;
+  timemark.setTime( val );
+  console.log( "timemark = " + timemark.getTime() );
 }
 
-//************************
+/*
+ * Main code
+ */
 
-//creation of teh EventFacade class
+// Creation of the EventFacade class
 var EF = new EventFacade();
 
-//pauses a video
+// Create a new timemark
+var timemark = new Timemark();
+
+// Pauses a video
 EF.pauseVideo();
-//gets the title and handles it according to the callback function provided
+
+// Gets the title and handles it according to the callback function provided
 EF.getTitle( setTitle );
-//gets the time and handles it according to the callback function provided
+
+// Gets the time and handles it according to the callback function provided
 EF.getTime( setTime );
 
-EF.getVideoID(function(val){
-  console.log(" video id: " + val);
+/**
+ * Output video id to the console
+ * @param video id
+ */
+EF.getVideoID( function(val) {
+  console.log( "video id: " + val );
 });
