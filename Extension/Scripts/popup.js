@@ -33,7 +33,7 @@ function setTime(val) {
   document.getElementById( "descriptionField" ).value = val;
   desc = val;
   time = val;
-  //console.log( "timemark = " + timemark.getTime() );
+  console.log( time );
 }
 
 /**
@@ -138,18 +138,19 @@ var url = EF.getURL( videoURL );
 
 //Builds current time URL by convert HH:MM:SS format to seconds and
 //concat it to the video url.
-function buildURL(time,url) {
+function buildURL() {
   var t = time.split(':');
   var seconds;
-  if(t.length() == 3) {
+  if(t.length == 3) {
      seconds = t[0]*3600+t[1]*60+t[2]*1;
   }
-  else if(t.length() == 2) {
+  else if(t.length == 2) {
     seconds = t[0]*60+t[1]*1;
   }
-  var newURL = url;
-  newURL.concat('&');
-  newURL.concat(seconds);
+  var newURL = "https://www.youtube.com/watch?v=";
+  newURL = newURL.concat(id);
+  newURL = newURL.concat('&t=');
+  newURL = newURL.concat(seconds);
   return newURL;
 }
 
@@ -161,7 +162,7 @@ function saveInfo(){
     setTimeout(saveInfo, 1);
     return;
   }
-  var currentURL = buildURL(time,url);
+  var currentURL = buildURL();
   tm = new Timemark(id, title, time, currentURL);
   addTimemark(tm);
   console.log("SAVEINFO: title: " + title + " | time: " + time);

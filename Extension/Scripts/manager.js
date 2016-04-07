@@ -15,6 +15,7 @@
  
 function addTimemark(tm) {
   timemarks.push(tm);
+  console.log("added timemark");
 }
 
 function populateList() {
@@ -28,7 +29,7 @@ function populateList() {
     var hyperlink = tm.title & " - " & tm.time;
     li.appendChild(document.createTextNode());
     tmlist.appendChild(li);
-    console.log("test");
+    console.log("populated list");
   }
 }
 
