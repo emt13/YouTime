@@ -24,7 +24,8 @@
     "http://*/*",
     "activeTab",
     "https://ajax.googleapis.com/",
-    "bookmarks"
+    "bookmarks",
+    "storage"
   ],
 
   "browser_action": {

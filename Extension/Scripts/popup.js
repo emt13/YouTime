@@ -139,6 +139,21 @@ function saveInfo(){
   }
   tm = new Timemark(id, title, time, id);
   console.log("SAVEINFO: title: " + title + " | time: " + time);
+
+  //var idStr = '' + id;
+
+  var obj = {};
+  obj[id] = [title, time, id];
+
+  chrome.storage.sync.set(obj, function(){
+    console.log("saved shit");
+    chrome.storage.sync.get(id, function(data){
+      console.log("data", data);
+    });
+  });
+
+  chrome.storage.sync.get({ })
+  //console.log(" manager.html: " + chrome.extension.getURL('manager.html'));
 }
 
 saveInfo(); //thread created
