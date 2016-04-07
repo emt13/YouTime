@@ -11,7 +11,9 @@
  */
 
 var title = "swag";
-var time = "cool";
+var time = "swag";
+var desc = "swag";
+var id = "swag";
 
 /**
  * Sets the name field to the value.
@@ -29,6 +31,7 @@ function setTitle(val) {
  */
 function setTime(val) {
   document.getElementById( "descriptionField" ).value = val;
+  desc = val;
   time = val;
   //console.log( "timemark = " + timemark.getTime() );
 }
@@ -38,6 +41,7 @@ function setTime(val) {
  * @param video id
  */
 function useVideoID(val) {
+  id = val;
   console.log( "videoID = " + val );
 }
 
@@ -65,12 +69,15 @@ EF.getVideoID( useVideoID );
   console.log("title: " + title + " | time: " + time);
 }*/
 
+var tm;
+
 function saveInfo(){
-  if(title == "swag" || time == "cool"){
+  if(title == "swag" || time == "swag" || id == "swag" || desc == "swag"){
     console.log(" -!- timing out for 1ms...");
     setTimeout(saveInfo, 1);
     return;
   }
+  tm = new Timemark(id, title, time, id);
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 }
 
