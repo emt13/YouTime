@@ -79,24 +79,6 @@ function saveTimemark(st,tm) {
   }
 }
 
-/*
- * checks if timemark already exists
- * @param st Stroage
- * @param tm timemark
-function findTimemark(st,tm) {
-  var found = "false";
-  for(vid in st.getVideos()) {
-    if(vid.getID() == id) {
-      for(links in vid.timemarks) {
-         if(link.getURL() == url) {
-	   found == "true";
-	 }
-      }
-    }
-  }
-  return found;
-}
-
 //************************
 
 /*
@@ -138,8 +120,11 @@ function buildURL() {
   return newURL;
 }
 
+//the timemark variable
 var tm;
 
+//saveInfo blocks a thread until the information has been accumulated
+//this is usually about 25 ms. This is the safest way to do this though
 function saveInfo(){
   if(title == "swag" || time == "swag" || id == "swag" || desc == "swag" || url == "swag"){
     console.log(" -!- timing out for 1ms...");
@@ -147,14 +132,13 @@ function saveInfo(){
     return;
   }
   var currentURL = buildURL();
+
   tm = new Timemark(id, title, time, currentURL);
-  //addTimemark(tm);
+
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 
-  //var idStr = '' + id;
-
   var obj = {};
-  obj[id] = [title, time, currentURL];
+  obj[id] = [tm.getTitle(), tm.getTime(), tm.getURL()];
 
   chrome.storage.sync.set(obj, function(){
     console.log("saved shit");
@@ -162,19 +146,9 @@ function saveInfo(){
       console.log("data", data);
     });
   });
-
-  //console.log(" manager.html: " + chrome.extension.getURL('manager.html'));
 }
 
 saveInfo(); //thread created
-
-//var st = new Storage();
-
-//saveTimemark(st, tm);
-
-/*setTimeout(function(){
-  console.log("title: " + title + " | time: " + time);
-}, 5);*/
 
 document.addEventListener('DOMContentLoaded', function () {
   var managerButton = document.getElementById('managerButton');

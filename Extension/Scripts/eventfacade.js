@@ -31,18 +31,18 @@ EventFacade.prototype.getTime = function( callback )
 {
   this.sendEvent( "YTgetTime", callback );
 }
-
+// sends a pause video message to the YouTube player
 EventFacade.prototype.pauseVideo = function()
 {
   // Passes a dummy callback. Client doesn't need to know this
   this.sendEvent( "YTpauseVideo", function(val){} );
 }
-
+// sends a message that gets the title of the video
 EventFacade.prototype.getTitle = function( callback )
 {
   this.sendEvent( "YTgetTitle", callback );
 }
-
+// gets the video ID from the URL
 EventFacade.prototype.getVideoID = function( callback )
 {
   //queries the tabs for the active, current one
@@ -57,7 +57,7 @@ EventFacade.prototype.getVideoID = function( callback )
     callback(videoURL.substring(indOfEq + 1, indEnd));
   });
 }
-
+// gets the whole URL
 EventFacade.prototype.getURL = function( callback )
 {
   //queries the tabs for the active, current one

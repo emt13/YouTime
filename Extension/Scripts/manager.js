@@ -11,42 +11,12 @@
  * @since 2016-04-06
  */
 
-/*
-function populatePage(allKeys){
-  for(i = 0; i < allKeys.length; i++){
-    chrome.storage.sync.get(allKeys[i], function(items){
-      //var btn = document.createElement("Button");
-
-      console.log(items.allKeys[i]);
-      var btn = document.createElement('a');
-      document.body.appendChild(btn);
-
-      //btn.appendChild(document.createTextNode(items[0]));
-      //document.body.appendChild(btn);
-    });
-  }
->>>>>>> timemarkSave
-}
-*/
-//chrome.storage.sync.get(null, function(items){
-//  var allKeys = Object.keys(items);
-//  console.log(allKeys);
-
-  //populatePage(allKeys);
-
-//});
-
- //var timemarks = []
-
-//function addTimemark(tm) {
-//  timemarks.push(tm);
-//}
-
 function shareFunction(url) {
   var shareAlert = "Copy/Paste this link: " + url;
   window.alert(shareAlert);
 }
 
+//Populates the page with the timemark information
 function populateList(timemarks) {
   console.log(timemarks);
   var sortedKeys = Object.keys(timemarks).sort();
@@ -55,21 +25,26 @@ function populateList(timemarks) {
   for(i = 0; i < sortedKeys.length; i++){
     var sortedKeys = Object.keys(timemarks).sort();
     console.log(" obj length: " + timemarks[sortedKeys[i]].length);
+
+    //creating a list element
     var li = document.createElement("li");
     var a = document.createElement("a");
     var tm = timemarks[sortedKeys];
+
+    //sets the href to the youtube link
     a.setAttribute("href", timemarks[sortedKeys[i]][2]);
     var hyperlink = timemarks[sortedKeys[i]][0] + " - " + timemarks[sortedKeys[i]][1];
     a.appendChild(document.createTextNode(hyperlink));
     li.appendChild(a);
+
+    //creates the share button. Adds a listener that allows you to copy the link
     var shareButton = document.createElement("BUTTON");
     shareButton.appendChild(document.createTextNode("Share"));
     shareButton.setAttribute("url", timemarks[sortedKeys[i]][2]);
     shareButton.addEventListener("click", function() {
-      //var shareAlert = "Copy/Paste this link: " + this.getAttribute("url");
       window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
-      //window.alert(shareAlert);
     }, false);
+
     li.appendChild(shareButton);
     tmlist.appendChild(li);
     console.log("populated list");
@@ -78,12 +53,5 @@ function populateList(timemarks) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  /*chrome.storage.sync.get(null, function(items){
-    var allKeys = Object.keys(items);
-    console.log(allKeys);
-
-    populatePage(allKeys);
-
-  });*/
   chrome.storage.sync.get(null, populateList);
 });
