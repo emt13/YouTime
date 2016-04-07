@@ -2,15 +2,48 @@
   "manifest_version": 2,
 
   "name": "YouTime",
-  "description": "This extension __________",
+  "description": "Save and manage YouTube video timemarks.",
   "version": "1.0",
+  "icons": {
+    "16": "Images/icon24.png",
+    "48": "Images/icon48.png",
+    "128": "Images/icon64.png"
+  },
+
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "Scripts/jquery-2.2.2.min.js",
+      "Scripts/background.js"
+    ]
+  },
+
+  "permissions": [
+    "tabs",
+    "https://*/*",
+    "http://*/*",
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "bookmarks"
+  ],
 
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": {
+      "32": "Images/icon32.png"
+    },
+    "default_title": "YouTime",
     "default_popup": "popup.html"
   },
-  "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
-  ]
+
+  "content_scripts": [{
+      "matches": [
+        "http://www.youtube.com/watch?*",
+        "https://www.youtube.com/watch?*"
+      ],
+      "js": [
+        "Scripts/jquery-2.2.2.min.js",
+        "Scripts/content.js"
+      ],
+      "run_at": "document_start"
+  }]
 }

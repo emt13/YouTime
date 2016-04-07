@@ -1,0 +1,122 @@
+/**
+ * This is the stylesheet for the HTML which
+ * makes everything look prettier.
+ *
+ * @author YouTime
+ * @version 1.0
+ * @since 2016-04-01
+ */
+
+/* Main HTML body style */
+body {
+    min-width: 250px;
+    margin: 0px;
+    font-family: Segoe UI, Arial, sans-serif;
+    font-size: 13px;
+    color: #e60000;
+    background-image: url(/Images/background_5_246x220.png);
+    background-color: transparent;
+    background-position: right bottom;
+    background-size: 48%;
+    background-repeat: no-repeat;
+}
+
+/* Header contains the headings */
+header {
+    display: block;
+    background-color: #e60000;
+    padding: 0.01em 16px;
+}
+
+/* Heading style */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin: 10px 0em;
+}
+
+/* Main heading style */
+h1 {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* Needed for input labels */
+label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Needed for table entries */
+th, td {
+    padding: 5px;
+}
+
+/* Folder selection */
+select {
+  min-width: 100%;
+  display: block;
+  border: 1px solid #999999;
+}
+
+select:focus {
+  border: 1px solid #ffa500;
+  outline: none;
+}
+
+/* Input style for buttons and text boxes */
+input[type="text"] {
+    display: block;
+    border: 1px solid #999999;
+    padding: 1px 4px;
+}
+
+input[type="text"]:disabled {
+    background-color: #f2f2f2;
+}
+
+input[type="text"]:focus {
+    border: 1px solid #ffa500;
+    outline: none;
+}
+
+input[type="button"] {
+    border: none;
+    display: inline-block;
+    outline: 0px;
+    padding: 4px 8px;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #e60000;
+}
+
+input[type="button"]:hover {
+    box-shadow: 2px 4px 2px 0 rgba(0,0,0,0.2);
+}
+
+.divider {
+    width: 5px;
+    height: auto;
+    display: inline-block;
+}
+
+/* Border that can be used */
+#top, #bottom, #left, #right {
+    background: #e60000;
+    position: fixed;
+}
+
+#left, #right {
+    top: 0; bottom: 0;
+    width: 5px;
+}
+#left { left: 0; }
+#right { right: 0; }
+
+#top, #bottom {
+    left: 0; right: 0;
+    height: 5px;
+}
+#top { top: 0; }
+#bottom { bottom: 0; }

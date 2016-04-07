@@ -1,2 +1,2 @@
 # YouTime
-Chrome plugin that allows the user to take and manage timestamps of YouTube videos
+Chrome plugin that allows the user to save and manage timestamps of YouTube videos.
