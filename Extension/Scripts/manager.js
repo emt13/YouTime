@@ -1,5 +1,5 @@
 /**
- * This script contains the 
+ * This script contains the
  * This is the script injected into manager.html
  * via a dynamic <script> tag. It serves as
  * the main logic for the timemark manager and organizer.
@@ -11,16 +11,43 @@
  * @since 2016-04-06
  */
  
-var timemarks = []
- 
-function addTimemark(tm) {
-  timemarks.push(tm);
-  console.log("added timemark");
-}
+/*
+function populatePage(allKeys){
+  for(i = 0; i < allKeys.length; i++){
+    chrome.storage.sync.get(allKeys[i], function(items){
+      //var btn = document.createElement("Button");
 
-function populateList() {
+      console.log(items.allKeys[i]);
+      var btn = document.createElement('a');
+      document.body.appendChild(btn);
+
+      //btn.appendChild(document.createTextNode(items[0]));
+      //document.body.appendChild(btn);
+    });
+  }
+>>>>>>> timemarkSave
+}
+*/
+//chrome.storage.sync.get(null, function(items){
+//  var allKeys = Object.keys(items);
+//  console.log(allKeys);
+
+  //populatePage(allKeys);
+
+//});
+
+ //var timemarks = []
+
+//function addTimemark(tm) {
+//  timemarks.push(tm);
+//}
+
+function populateList(timemarks) {
+  console.log(timemarks);
   var tmlist = document.getElementById("timestampList");
-  for (i = 0; i < timemarks.length; i++) {
+  for(i = 0; i < allKeys.length; i++){
+    var sortedKeys = Object.keys(timemarks).sort();
+    console.log(" obj: " + timemarks[sortedKeys]);
     var li = document.createElement("li");
     var a = document.createElement("a");
     var tm = timemarks[i];
@@ -35,10 +62,16 @@ function populateList() {
     tmlist.appendChild(li);
     console.log("populated list");
   }
+
 }
 
-addTimemark(new Timemark("1", "test", "1:52", "https://www.youtube.com"));
-
 document.addEventListener('DOMContentLoaded', function () {
-  populateList();
+  /*chrome.storage.sync.get(null, function(items){
+    var allKeys = Object.keys(items);
+    console.log(allKeys);
+
+    populatePage(allKeys);
+
+  });*/
+  chrome.storage.sync.get(null, populateList);
 });
