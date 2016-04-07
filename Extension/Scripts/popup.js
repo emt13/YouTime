@@ -53,66 +53,49 @@ function videoURL(val) {
   return val;
 }
 
-/**
- * Creates timemark based on the information provided by the EventFacade.
- * Checks to see if timemark has been created before.
- * @param EF EventFacade
- * @param Storage object holding all links and videos
+/*
+ * Saves a timemark by checking if it has a video object already
+ * if not then it creates one and stores everything properly.
+ * @param st stamp
+ * @param tm
  */
-function createTimemark(EF, Storage) {
-  var url = EventFacade.createUrl();
-  var Timemark = new Timemark();
-  Timemark.url = url;
-  Timemark.id = EF.getVideoId(useVideoID);
-  Timemark.title = EF.getTitle(setTitle);
-  Timemark.time = EF.getTime(setTime);
-  //Timemark.description
-  if(findTimemark(Timemark,Storage) == "false") {
-     saveTimemark(Storage,Timemark);
+function saveTimemark(st,tm) {
+  var found = findTimemark(st,tm);
+  if(found == "false") {
+    var save = "false";
+    for(vid in st.getVideos()) {
+      var id2 = vid.getID();
+      if(id == id2) {
+        vid.add(tm);
+	save = "true";
+	break;
+      }
+    }
+    if(saved == "false") {
+      var video = new Video(tm);
+      st.add(video);
+    }
   }
 }
 
 /*
- * finds if a timemark has been created before
- * @param Storage
- * @param Timemark
- */
-function findTimemark(Storage, Timemark) {
+ * checks if timemark already exists
+ * @param st Stroage
+ * @param tm timemark
+function findTimemark(st,tm) {
   var found = "false";
-  for( video in Storage.videos ) {
-     if( video.id == Timemark.id ) {
-     	for( links in video.timemarks ) {
-	       if( link.url == Timemark.url ) {
-	          found = "true";
-	       }
-	    }
+  for(vid in st.getVideos()) {
+    if(vid.getID() == id) {
+      for(links in vid.timemarks) {
+         if(link.getURL() == url) {
+	   found == "true";
+	 }
+      }
     }
   }
   return found;
 }
 
-/*
- * Saves a timestamp by checking if it has a video object already
- * if not then it creates one and stores everything properly.
- * @param Timemark
- * @param Storage
- */
-function createVideo(Storage, Timestamp) {
-  var save = "false";
-  var id = Timestamp.getID();
-  for( vid in Storage.videos) {
-    var id2 = vid.id;
-    if( id2 == id ) {
-      vid.timemarks.push(Timestamp);
-      save = "true";
-      break;
-    }
-  }
-  if( saved == "false" ) {
-    var video = Video(Timemark.id,Timemark.title);
-    Storage.videos.push(video);
-  }
-}
 //************************
 
 /*
@@ -167,6 +150,10 @@ function saveInfo(){
 }
 
 saveInfo(); //thread created
+
+var st = new Storage();
+
+saveTimemark(st, tm);
 
 /*setTimeout(function(){
   console.log("title: " + title + " | time: " + time);
