@@ -42,6 +42,11 @@ function populatePage(allKeys){
 //  timemarks.push(tm);
 //}
 
+function shareFunction(url) {
+  var shareAlert = "Copy/Paste this link: " + url;
+  window.alert(shareAlert);
+}
+
 function populateList(timemarks) {
   console.log(timemarks);
   var sortedKeys = Object.keys(timemarks).sort();
@@ -59,7 +64,12 @@ function populateList(timemarks) {
     li.appendChild(a);
     var shareButton = document.createElement("BUTTON");
     shareButton.appendChild(document.createTextNode("Share"));
-
+    shareButton.setAttribute("url", timemarks[sortedKeys[i]][2]);
+    shareButton.addEventListener("click", function() {
+      //var shareAlert = "Copy/Paste this link: " + this.getAttribute("url");
+      window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
+      //window.alert(shareAlert);
+    }, false);
     li.appendChild(shareButton);
     tmlist.appendChild(li);
     console.log("populated list");
