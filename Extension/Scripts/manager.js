@@ -10,7 +10,7 @@
  * @version 1.0
  * @since 2016-04-06
  */
- 
+
 /*
 function populatePage(allKeys){
   for(i = 0; i < allKeys.length; i++){
@@ -45,7 +45,7 @@ function populatePage(allKeys){
 function populateList(timemarks) {
   console.log(timemarks);
   var tmlist = document.getElementById("timestampList");
-  for(i = 0; i < allKeys.length; i++){
+  for(i = 0; i < timemarks.length; i++){
     var sortedKeys = Object.keys(timemarks).sort();
     console.log(" obj: " + timemarks[sortedKeys]);
     var li = document.createElement("li");
@@ -57,7 +57,7 @@ function populateList(timemarks) {
     li.appendChild(a);
     var shareButton = document.createElement("BUTTON");
     shareButton.appendChild(document.createTextNode("Share"));
-    
+
     li.appendChild(shareButton);
     tmlist.appendChild(li);
     console.log("populated list");
