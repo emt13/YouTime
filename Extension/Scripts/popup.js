@@ -19,7 +19,6 @@ function setTitle(val) {
   timemark.setTitle( val );
   console.log( "timemark = " + timemark.getTitle() );
 }
-
 /**
  * Sets the description field to the value.
  * @param description
@@ -30,10 +29,20 @@ function setTime(val) {
   console.log( "timemark = " + timemark.getTime() );
 }
 
+/**
+ * Output video id to the console
+ * @param video id
+ */
+function useVideoID(val){
+  console.log(" video id: " + val);
+}
+
+//************************
+
+
 /*
  * Main code
  */
-
 // Creation of the EventFacade class
 var EF = new EventFacade();
 
@@ -49,10 +58,11 @@ EF.getTitle( setTitle );
 // Gets the time and handles it according to the callback function provided
 EF.getTime( setTime );
 
-/**
- * Output video id to the console
- * @param video id
- */
-EF.getVideoID( function(val) {
-  console.log( "video id: " + val );
+EF.getVideoID( useVideoID );
+
+document.addEventListener('DOMContentLoaded', function () {
+  var managerButton = document.getElementById('managerButton');
+  managerButton.addEventListener('click', function(){
+    chrome.tabs.create({active: false, url: "https://www.youtube.com"});
+  });
 });
