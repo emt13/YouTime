@@ -19,40 +19,35 @@ var time = "cool";
  */
 function setTitle(val) {
   document.getElementById( "nameField" ).value = val;
-  //timemark.setTitle( val );
   title = val;
-  console.log( "timemark = " + timemark.getTitle() );
+  //console.log( "timemark = " + timemark.getTitle() );
 }
+
 /**
  * Sets the description field to the value.
  * @param description
  */
 function setTime(val) {
   document.getElementById( "descriptionField" ).value = val;
-  //timemark.setTime( val );
   time = val;
-  console.log( "timemark = " + timemark.getTime() );
+  //console.log( "timemark = " + timemark.getTime() );
 }
 
 /**
  * Output video id to the console
  * @param video id
  */
-function useVideoID(val){
-  console.log(" video id: " + val);
+function useVideoID(val) {
+  console.log( "videoID = " + val );
 }
 
 //************************
-
 
 /*
  * Main code
  */
 // Creation of the EventFacade class
 var EF = new EventFacade();
-
-// Create a new timemark
-var timemark = new Timemark();
 
 // Pauses a video
 EF.pauseVideo();
@@ -63,6 +58,7 @@ EF.getTitle( setTitle );
 // Gets the time and handles it according to the callback function provided
 EF.getTime( setTime );
 
+// Get the video id
 EF.getVideoID( useVideoID );
 
 /*while(title == "swag" || time == "cool"){
