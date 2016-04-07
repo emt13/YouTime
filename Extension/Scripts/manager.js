@@ -11,7 +11,7 @@
  * @since 2016-04-06
  */
  
- var timemarks = []
+var timemarks = []
  
 function addTimemark(tm) {
   timemarks.push(tm);
@@ -24,14 +24,20 @@ function populateList() {
     var li = document.createElement("li");
     var a = document.createElement("a");
     var tm = timemarks[i];
-    a.setAttribute("href", tm.url);
+    a.setAttribute("href", tm.getUrl());
+    var hyperlink = tm.getTitle() + " - " + tm.getTime();
+    a.appendChild(document.createTextNode(hyperlink));
     li.appendChild(a);
-    var hyperlink = tm.title & " - " & tm.time;
-    li.appendChild(document.createTextNode());
+    var shareButton = document.createElement("BUTTON");
+    shareButton.appendChild(document.createTextNode("Share"));
+    
+    li.appendChild(shareButton);
     tmlist.appendChild(li);
     console.log("populated list");
   }
 }
+
+addTimemark(new Timemark("1", "test", "1:52", "https://www.youtube.com"));
 
 document.addEventListener('DOMContentLoaded', function () {
   populateList();
