@@ -46,6 +46,14 @@ function useVideoID(val) {
 }
 
 /**
+ * Gets the URL of the video
+ * @param the video url
+ */
+function videoURL(val) {
+  return val;
+}
+
+/**
  * Creates timemark based on the information provided by the EventFacade.
  * Checks to see if timemark has been created before.
  * @param EF EventFacade
@@ -125,9 +133,8 @@ EF.getTime( setTime );
 // Get the video id
 EF.getVideoID( useVideoID );
 
-/*while(title == "swag" || time == "cool"){
-  console.log("title: " + title + " | time: " + time);
-}*/
+// Get video URL
+var url = EF.getURL( videoURL );
 
 var tm;
 
