@@ -63,6 +63,6 @@ EF.getVideoID( useVideoID );
 document.addEventListener('DOMContentLoaded', function () {
   var managerButton = document.getElementById('managerButton');
   managerButton.addEventListener('click', function(){
-    chrome.tabs.create({active: false, url: "https://www.youtube.com"});
+    chrome.tabs.create({active: true, url: chrome.extension.getURL('manager.html')});
   });
 });
