@@ -10,13 +10,17 @@
  * @since 2016-04-01
  */
 
+var title = "swag";
+var time = "cool";
+
 /**
  * Sets the name field to the value.
  * @param title
  */
 function setTitle(val) {
   document.getElementById( "nameField" ).value = val;
-  timemark.setTitle( val );
+  //timemark.setTitle( val );
+  title = val;
   console.log( "timemark = " + timemark.getTitle() );
 }
 /**
@@ -25,7 +29,8 @@ function setTitle(val) {
  */
 function setTime(val) {
   document.getElementById( "descriptionField" ).value = val;
-  timemark.setTime( val );
+  //timemark.setTime( val );
+  time = val;
   console.log( "timemark = " + timemark.getTime() );
 }
 
@@ -60,9 +65,33 @@ EF.getTime( setTime );
 
 EF.getVideoID( useVideoID );
 
+/*while(title == "swag" || time == "cool"){
+  console.log("title: " + title + " | time: " + time);
+}*/
+
+function saveInfo(){
+  if(title == "swag" || time == "cool"){
+    console.log(" -!- timing out for 1ms...");
+    setTimeout(saveInfo, 1);
+    return;
+  }
+  console.log("SAVEINFO: title: " + title + " | time: " + time);
+}
+
+saveInfo(); //thread created
+
+/*setTimeout(function(){
+  console.log("title: " + title + " | time: " + time);
+}, 5);*/
+
 document.addEventListener('DOMContentLoaded', function () {
   var managerButton = document.getElementById('managerButton');
   managerButton.addEventListener('click', function(){
     chrome.tabs.create({active: true, url: chrome.extension.getURL('manager.html')});
+  });
+
+  var doneButton = document.getElementById('doneButton');
+  doneButton.addEventListener('click', function(){
+    console.log("timark info: " + timemark.getTitle() + " | " + timemark.getTime());
   });
 });
