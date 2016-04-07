@@ -138,7 +138,7 @@ function saveInfo(){
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 
   var obj = {};
-  obj[id] = [tm.getTitle(), tm.getTime(), tm.getURL()];
+  obj[id] = [tm.getTitle(), tm.getTime(), tm.getUrl()];
 
   chrome.storage.sync.set(obj, function(){
     console.log("saved shit");
