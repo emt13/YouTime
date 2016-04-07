@@ -39,7 +39,11 @@ EventFacade.prototype.getVideoID = function( callback )
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
     var videoURL = tabs[0].url;
     var indOfEq = videoURL.indexOf("=");
+    var indEnd = videoURL.indexOf("&");
+    if(indEnd == -1){
+      indEnd = videoURL.length;
+    }
     //sends the video id to the callback
-    callback(videoURL.substring(indOfEq + 1, videoURL.length));
+    callback(videoURL.substring(indOfEq + 1, indEnd));
   });
 }

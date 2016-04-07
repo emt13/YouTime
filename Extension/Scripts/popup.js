@@ -10,6 +10,8 @@
  * @since 2016-04-01
  */
 
+//********
+
 //sets the nameField to the value
 function setTitle(val){
   document.getElementById('nameField').value = val;
@@ -37,3 +39,10 @@ EF.getTitle( setTitle );
 EF.getTime( setTime );
 
 EF.getVideoID( useVideoID );
+
+document.addEventListener('DOMContentLoaded', function () {
+  var managerButton = document.getElementById('managerButton');
+  managerButton.addEventListener('click', function(){
+    chrome.tabs.create({active: false, url: "https://www.youtube.com"});
+  });
+});
