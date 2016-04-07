@@ -45,6 +45,65 @@ function useVideoID(val) {
   console.log( "videoID = " + val );
 }
 
+/**
+ * Creates timemark based on the information provided by the EventFacade.
+ * Checks to see if timemark has been created before.
+ * @param EF EventFacade
+ * @param Storage object holding all links and videos
+ */
+function createTimemark(EF, Storage) {
+  var url = EventFacade.createUrl();
+  var Timemark = new Timemark();
+  Timemark.url = url;
+  Timemark.id = EF.getVideoId(useVideoID);
+  Timemark.title = EF.getTitle(setTitle);
+  Timemark.time = EF.getTime(setTime);
+  //Timemark.description
+  if(findTimemark(Timemark,Storage) == "false") {
+     saveTimemark(Storage,Timemark);
+  }
+}
+
+/*
+ * finds if a timemark has been created before
+ * @param Storage
+ * @param Timemark
+ */
+function findTimemark(Storage, Timemark) {
+  var found = "false";
+  for( video in Storage.videos ) {
+     if( video.id == Timemark.id ) {
+     	for( links in video.timemarks ) {
+	   if( link.url == Timemark.url ) {
+	     found = "true";
+	   }
+	}
+  }
+  return found;
+}
+
+/*
+ * Saves a timestamp by checking if it has a video object already
+ * if not then it creates one and stores everything properly.
+ * @param Timemark
+ * @param Storage
+ */
+function createVideo(Storage, Timestamp) {
+  var save = "false";
+  var id = Timestamp.getID();
+  for( vid in Storage.videos) {
+    var id2 = vid.id;
+    if( id2 == id ) {
+      vid.timemarks.push(Timestamp);
+      save = "true";
+      break;
+    }
+  }
+  if( saved == "false" ) {
+    var video = Video(Timemark.id,Timemark.title);
+    Storage.videos.push(video);
+  }
+}
 //************************
 
 /*
