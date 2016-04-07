@@ -74,10 +74,11 @@ function findTimemark(Storage, Timemark) {
   for( video in Storage.videos ) {
      if( video.id == Timemark.id ) {
      	for( links in video.timemarks ) {
-	   if( link.url == Timemark.url ) {
-	     found = "true";
-	   }
-	}
+	       if( link.url == Timemark.url ) {
+	          found = "true";
+	       }
+	    }
+    }
   }
   return found;
 }
