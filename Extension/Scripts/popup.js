@@ -46,6 +46,14 @@ function useVideoID(val) {
 }
 
 /**
+ * Gets the URL of the video
+ * @param the video url
+ */
+function videoURL(val) {
+  return val;
+}
+
+/**
  * Creates timemark based on the information provided by the EventFacade.
  * Checks to see if timemark has been created before.
  * @param EF EventFacade
@@ -125,9 +133,25 @@ EF.getTime( setTime );
 // Get the video id
 EF.getVideoID( useVideoID );
 
-/*while(title == "swag" || time == "cool"){
-  console.log("title: " + title + " | time: " + time);
-}*/
+// Get video URL
+var url = EF.getURL( videoURL );
+
+//Builds current time URL by convert HH:MM:SS format to seconds and
+//concat it to the video url.
+function buildURL(time,url) {
+  var t = time.split(':');
+  var seconds;
+  if(t.length() == 3) {
+     seconds = t[0]*3600+t[1]*60+t[2]*1;
+  }
+  else if(t.length() == 2) {
+    seconds = t[0]*60+t[1]*1;
+  }
+  var newURL = url;
+  newURL.concat('&');
+  newURL.concat(seconds);
+  return newURL;
+}
 
 var tm;
 
@@ -137,7 +161,8 @@ function saveInfo(){
     setTimeout(saveInfo, 1);
     return;
   }
-  tm = new Timemark(id, title, time, id);
+  var currentURL = buildURL(time,url);
+  tm = new Timemark(id, title, time, currentURL);
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 
   //var idStr = '' + id;
