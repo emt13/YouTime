@@ -44,15 +44,17 @@ function populatePage(allKeys){
 
 function populateList(timemarks) {
   console.log(timemarks);
+  var sortedKeys = Object.keys(timemarks).sort();
+  console.log(" obj: " + sortedKeys.length);
   var tmlist = document.getElementById("timestampList");
-  for(i = 0; i < timemarks.length; i++){
+  for(i = 0; i < sortedKeys.length; i++){
     var sortedKeys = Object.keys(timemarks).sort();
-    console.log(" obj: " + timemarks[sortedKeys]);
+    console.log(" obj length: " + timemarks[sortedKeys[i]].length);
     var li = document.createElement("li");
     var a = document.createElement("a");
-    var tm = timemarks[i];
-    a.setAttribute("href", tm.getUrl());
-    var hyperlink = tm.getTitle() + " - " + tm.getTime();
+    var tm = timemarks[sortedKeys];
+    a.setAttribute("href", timemarks[sortedKeys[i]][2]);
+    var hyperlink = timemarks[sortedKeys[i]][0] + " - " + timemarks[sortedKeys[i]][1];
     a.appendChild(document.createTextNode(hyperlink));
     li.appendChild(a);
     var shareButton = document.createElement("BUTTON");
