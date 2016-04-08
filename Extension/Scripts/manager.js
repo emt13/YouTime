@@ -46,6 +46,18 @@ function populateList(timemarks) {
     }, false);
 
     li.appendChild(shareButton);
+
+    var removeButton = document.createElement("BUTTON");
+    removeButton.appendChild(document.createTextNode("Remove"));
+    removeButton.setAttribute("timemark", timemarks[sortedKeys[i]]);
+    removeButton.setAttribute("id", sortedKeys[i]);
+    removeButton.addEventListener("click", function() {
+      chrome.storage.sync.remove(this.getAttribute("id"));
+      window.location.reload();
+      console.log("removed");
+    });
+
+    li.appendChild(removeButton);
     tmlist.appendChild(li);
     console.log("populated list");
   }
@@ -54,4 +66,11 @@ function populateList(timemarks) {
 
 document.addEventListener('DOMContentLoaded', function () {
   chrome.storage.sync.get(null, populateList);
+
+  var clearButton = document.getElementById('clearButton');
+  clearButton.addEventListener('click', function() {
+    chrome.storage.sync.clear();
+    window.location.reload();
+    console.log("timemarks cleared");
+  });
 });
