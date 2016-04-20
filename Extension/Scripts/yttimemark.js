@@ -1,5 +1,5 @@
 /**
- * This script contains the Timemark class, which
+ * This script contains the YTTimemark class, which
  * stores all of the timemark video information,
  * such as the url, the description, and the time.
  *
@@ -8,7 +8,7 @@
  * @since 2016-04-01
  */
 
-class Timemark {
+class YTTimemark {
 
   /*
    * Constructor.
