@@ -17,7 +17,50 @@ YTManager.prototype.populatePage = function(timemarks){
     vid.setAttribute("class", "accordian");
 
     vid.appendChild( document.createTextNode(video.getTitle()) );
+    
+    var tmlist = document.createElement("ul");
+    
+    var marks = video.getTimemarks();
+    
+    for(var j = 0; j < marks.length; j++) {
+      var mark = marks[j];
+      var li = document.createElement("li");
+      var a = document.createElement("a");
 
+      //sets the href to the youtube link
+      a.setAttribute("href", mark['url']);
+      var hyperlink = mark['desc'] + " - " + mark['time'];
+      a.appendChild(document.createTextNode(hyperlink));
+      li.appendChild(a);
+
+      //creates the share button. Adds a listener that allows you to copy the link
+      var shareButton = document.createElement("BUTTON");
+      shareButton.appendChild(document.createTextNode("Share"));
+      shareButton.setAttribute("url", mark['url']);
+      shareButton.addEventListener("click", function() {
+        window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
+      }, false);
+
+      li.appendChild(shareButton);
+
+      /*
+      var removeButton = document.createElement("BUTTON");
+      removeButton.appendChild(document.createTextNode("Remove"));
+      removeButton.setAttribute("timemark", timemarks[sortedKeys[i]]);
+      removeButton.setAttribute("id", sortedKeys[i]);
+      removeButton.addEventListener("click", function() {
+        chrome.storage.sync.remove(this.getAttribute("id"));
+        window.location.reload();
+        console.log("removed");
+      });
+
+      li.appendChild(removeButton);
+      */
+      tmlist.appendChild(li);
+    }
+  
+    vid.appendChild( tmlist )
+    
     document.body.appendChild( vid );
 
   }
