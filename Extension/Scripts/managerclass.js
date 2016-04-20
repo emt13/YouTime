@@ -28,15 +28,15 @@ YTManager.prototype.populatePage = function(timemarks){
       var a = document.createElement("a");
 
       //sets the href to the youtube link
-      a.setAttribute("href", mark.getUrl());
-      var hyperlink = mark.getDescription() + " - " + mark.getTime();
+      a.setAttribute("href", mark[1]);
+      var hyperlink = mark[3] + " - " + mark[2];
       a.appendChild(document.createTextNode(hyperlink));
       li.appendChild(a);
 
       //creates the share button. Adds a listener that allows you to copy the link
       var shareButton = document.createElement("BUTTON");
       shareButton.appendChild(document.createTextNode("Share"));
-      shareButton.setAttribute("url", mark.getUrl());
+      shareButton.setAttribute("url", mark[1]);
       shareButton.addEventListener("click", function() {
         window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
       }, false);
