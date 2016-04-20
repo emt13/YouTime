@@ -13,11 +13,11 @@ class Timemark {
   /*
    * Constructor.
    */
-  constructor(id, title, time, url) {
+  constructor(id, title, time, url, desc) {
     this.id = id;
     this.title = title;
     this.time = time;
-    this.description = "";
+    this.description = desc;
     this.url = url;
   }
 

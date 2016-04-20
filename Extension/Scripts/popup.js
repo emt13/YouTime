@@ -84,6 +84,9 @@ function saveTimemark(st,tm) {
 /*
  * Main code
  */
+
+var appStorage = new YTStorage();
+
 // Creation of the EventFacade class
 var EF = new EventFacade();
 
@@ -133,19 +136,12 @@ function saveInfo(){
   }
   var currentURL = buildURL();
 
-  tm = new Timemark(id, title, time, currentURL);
+  tm = new Timemark(id, title, time, currentURL, "DEFAULT DESCRIPTION");
 
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 
-  var obj = {};
-  obj[id] = [tm.getTitle(), tm.getTime(), tm.getUrl()];
-
-  chrome.storage.sync.set(obj, function(){
-    console.log("saved shit");
-    chrome.storage.sync.get(id, function(data){
-      console.log("data", data);
-    });
-  });
+  //saves the timemark to the sync storage
+  appStorage.save(tm);
 }
 
 saveInfo(); //thread created

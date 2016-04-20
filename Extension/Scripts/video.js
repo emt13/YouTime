@@ -8,25 +8,22 @@
  * @since 2016-04-01
  */
 
-class Video {
+class YTVideo {
   /*
    * Constructor.
    */
-  constructor(id, title) {
+  /*constructor(id, title) {
     this.id = id;
     this.title = title;
     this.timemarks = [];
+  }*/
+  constructor(tm){
+    this.title = tm['title'];
+    this.marks = tm['timemarks'];
   }
 
-  getId() { return this.id; }
+  getTimemarks() { return this.marks; }
 
   getTitle() { return this.title; }
 
-  /*
-   * Add a timemark to the Video class.
-   * @param timemark
-   */
-  add(timemark) {
-    this.timemarks.push( timemark );
-  }
 }
