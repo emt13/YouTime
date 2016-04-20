@@ -16,6 +16,12 @@ var desc = "swag";
 var id = "swag";
 var url = "swag";
 
+
+var appStorage = new YTStorage();
+
+// Creation of the EventFacade class
+var EF = new EventFacade();
+
 /**
  * Sets the name field to the value.
  * @param title
@@ -79,31 +85,51 @@ function saveTimemark(st,tm) {
   }
 }
 
+function getData(){
+  // Pauses a video
+  EF.pauseVideo();
+
+  // Gets the title and handles it according to the callback function provided
+  EF.getTitle( setTitle );
+
+  // Gets the time and handles it according to the callback function provided
+  EF.getTime( setTime );
+
+  // Get the video id
+  EF.getVideoID( useVideoID );
+
+  // Get video URL
+  EF.getURL( videoURL );
+}
+
+function injectScript(){
+  chrome.tabs.executeScript(null, {file: "Scripts/content.js"});
+}
+
 //************************
 
 /*
  * Main code
  */
+injectScript();
+getData();
 
-var appStorage = new YTStorage();
+console.log("title: " + title);
+console.log("desc: " + desc);
+console.log("time: " + time);
+console.log("id: " + id);
+console.log("url: " + url);
+if(title == "swag" || desc == "swag" || time == "swag" || id == "swag" || url == "swag"){
+  setTimeout(function(){}, 1);
+  injectScript();
+  getData();
 
-// Creation of the EventFacade class
-var EF = new YTEventFacade();
-
-// Pauses a video
-EF.pauseVideo();
-
-// Gets the title and handles it according to the callback function provided
-EF.getTitle( setTitle );
-
-// Gets the time and handles it according to the callback function provided
-EF.getTime( setTime );
-
-// Get the video id
-EF.getVideoID( useVideoID );
-
-// Get video URL
-EF.getURL( videoURL );
+  console.log(" - title: " + title);
+  console.log(" - desc: " + desc);
+  console.log(" - time: " + time);
+  console.log(" - id: " + id);
+  console.log(" - url: " + url);
+}
 
 //Builds current time URL by convert HH:MM:SS format to seconds and
 //concat it to the video url.
