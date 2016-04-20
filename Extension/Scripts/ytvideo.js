@@ -1,5 +1,5 @@
 /**
- * This script contains the Video class, which
+ * This script contains the YTVideo class, which
  * stores all of the timemarks for a particular
  * YouTube video.
  *

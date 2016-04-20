@@ -88,7 +88,7 @@ function saveTimemark(st,tm) {
 var appStorage = new YTStorage();
 
 // Creation of the EventFacade class
-var EF = new EventFacade();
+var EF = new YTEventFacade();
 
 // Pauses a video
 EF.pauseVideo();
@@ -136,7 +136,7 @@ function saveInfo(){
   }
   var currentURL = buildURL();
 
-  tm = new Timemark(id, title, time, currentURL, "DEFAULT DESCRIPTION");
+  tm = new YTTimemark(id, title, time, currentURL, "DEFAULT DESCRIPTION");
 
   console.log("SAVEINFO: title: " + title + " | time: " + time);
 

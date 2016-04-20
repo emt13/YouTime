@@ -1,5 +1,5 @@
 /**
- * This script contains the EventFacade class, which
+ * This script contains the YTEventFacade class, which
  * handles all events between the injected
  * popup.js and the content.js files.
  *
@@ -9,7 +9,7 @@
  */
 
 // Constructor to this class
-function EventFacade()
+function YTEventFacade()
 {
   // TODO: Find some way to make this private!
   // Because this is asynchronous, need a callback to manipulate the data that is received
@@ -27,23 +27,23 @@ function EventFacade()
 }
 
 // Gets the time and uses the call back to manipulate it
-EventFacade.prototype.getTime = function( callback )
+YTEventFacade.prototype.getTime = function( callback )
 {
   this.sendEvent( "YTgetTime", callback );
 }
 // sends a pause video message to the YouTube player
-EventFacade.prototype.pauseVideo = function()
+YTEventFacade.prototype.pauseVideo = function()
 {
   // Passes a dummy callback. Client doesn't need to know this
   this.sendEvent( "YTpauseVideo", function(val){} );
 }
 // sends a message that gets the title of the video
-EventFacade.prototype.getTitle = function( callback )
+YTEventFacade.prototype.getTitle = function( callback )
 {
   this.sendEvent( "YTgetTitle", callback );
 }
 // gets the video ID from the URL
-EventFacade.prototype.getVideoID = function( callback )
+YTEventFacade.prototype.getVideoID = function( callback )
 {
   //queries the tabs for the active, current one
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
@@ -58,7 +58,7 @@ EventFacade.prototype.getVideoID = function( callback )
   });
 }
 // gets the whole URL
-EventFacade.prototype.getURL = function( callback )
+YTEventFacade.prototype.getURL = function( callback )
 {
   //queries the tabs for the active, current one
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){

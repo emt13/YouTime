@@ -1,24 +1,29 @@
-/**
- * This script contains the
- * This is the script injected into manager.html
- * via a dynamic <script> tag. It serves as
- * the main logic for the timemark manager and organizer.
- * It does not have access to any of the
- * chrome.* APIs.
- *
- * @author YouTime
- * @version 1.0
- * @since 2016-04-06
- */
-
-function shareFunction(url) {
-  var shareAlert = "Copy/Paste this link: " + url;
-  window.alert(shareAlert);
+function YTManager(doc) {
+  console.log("Created the manager!");
+  this.document = doc;
 }
 
-//Populates the page with the timemark information
-/*function populateList(timemarks) {
+YTManager.prototype.populatePage = function(timemarks){
   console.log(timemarks);
+
+  var sortedKeys = Object.keys(timemarks).sort();
+  for(var i = 0; i < sortedKeys.length; i++){
+    console.log(sortedKeys[i]);
+    var video = new YTVideo(timemarks[sortedKeys[i]]);
+    console.log(" -- video:");
+    console.log(video);
+
+    var vid = document.createElement("div");
+    vid.setAttribute("class", "accordian");
+
+    vid.appendChild( document.createTextNode(video.getTitle()) );
+
+    document.body.appendChild( vid );
+
+  }
+
+
+  /*console.log(timemarks);
   var sortedKeys = Object.keys(timemarks).sort();
   console.log(" obj: " + sortedKeys.length);
   var tmlist = document.getElementById("timestampList");
@@ -60,20 +65,6 @@ function shareFunction(url) {
     li.appendChild(removeButton);
     tmlist.appendChild(li);
     console.log("populated list");
-  }
+  }*/
 
-}*/
-
-var manager = new YTManager(document);
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  chrome.storage.sync.get(null, manager.populatePage);
-
-  var clearButton = document.getElementById('clearButton');
-  clearButton.addEventListener('click', function() {
-    chrome.storage.sync.clear();
-    window.location.reload();
-    console.log("timemarks cleared");
-  });
-});
+}
