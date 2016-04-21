@@ -20,7 +20,7 @@ var url = "swag";
 var appStorage = new YTStorage();
 
 // Creation of the EventFacade class
-var EF = new EventFacade();
+var EF = new YTEventFacade();
 
 /**
  * Sets the name field to the value.
