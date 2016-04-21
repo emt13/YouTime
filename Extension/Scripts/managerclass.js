@@ -17,6 +17,18 @@ YTManager.prototype.populatePage = function(timemarks){
     vid.setAttribute("class", "accordian");
 
     vid.appendChild( document.createTextNode(video.getTitle()) );
+
+    var removeButton =  document.createElement("BUTTON");
+    removeButton.appendChild(document.createTextNode("Remove"));
+    removeButton.setAttribute("video", timemarks[sortedKeys[i]]);
+    removeButton.setAttribute("id", sortedKeys[i]);
+    removeButton.addEventListener("click", function() {
+      chrome.storage.sync.remove(this.getAttribute("id"));
+      window.location.reload();
+      console.log("removed");
+    });
+
+    vid.appendChild(removeButton);
     
     var tmlist = document.createElement("ul");
     
@@ -43,11 +55,35 @@ YTManager.prototype.populatePage = function(timemarks){
 
       li.appendChild(shareButton);
 
+      var removeTime = document.createElement("BUTTON");
+      removeTime.appendChild(document.createTextNode("Remove"));
+      removeTime.setAttribute("timemark", mark);
+      removeTime.setAttribute("time", mark["id"]);
+      removeTime.addEventListener("click", function() {
+	for(var i = 0; i < sortedKeys.length; i++) {
+	  if(sortedKeys[i] == mark["id"]) {
+	    for(var j = 0; j < timemarks[sortedKeys[i]]['timemarks'].length; j++) {
+	      if(timemarks[sortedKeys[i]]['timemarks'][j]['time'] == mark['time']) {
+	        timemarks[sortedKeys[i]]['timemarks'].splice(j,1);
+		chrome.storage.sync.set(timemarks);
+		if(timemarks[sortedKeys[i]]['timemarks'].length == 0) {
+		   chrome.storage.sync.remove(sortedKeys[i]);
+		}
+		window.location.reload();
+	      	console.log("REMOVED");
+	      }
+	    }
+	  }
+	}
+      });
+
+      li.appendChild(removeTime);
+
       /*
       var removeButton = document.createElement("BUTTON");
       removeButton.appendChild(document.createTextNode("Remove"));
       removeButton.setAttribute("timemark", timemarks[sortedKeys[i]]);
-      removeButton.setAttribute("id", sortedKeys[i]);
+      removeButton.setAttribute(d", sortedKeys[i]);
       removeButton.addEventListener("click", function() {
         chrome.storage.sync.remove(this.getAttribute("id"));
         window.location.reload();
