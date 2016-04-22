@@ -37,8 +37,7 @@ function setTitle(val) {
  * @param description
  */
 function setTime(val) {
-  document.getElementById( "descriptionField" ).value = val;
-  desc = val;
+  document.getElementById( "timeField" ).value = val;
   time = val;
   console.log( time );
 }
@@ -51,6 +50,19 @@ function useVideoID(val) {
   id = val;
   console.log( "videoID = " + val );
 }
+
+/**
+ * updates the popup title
+ * @param url
+ */
+ function updateVideoTitle(val){
+   var elem = document.getElementById("actionHeader");
+   if(val.indexOf("watch?v=") != -1){
+     elem.innerHTML = "Timestamp Added!";
+   }else{
+     elem.innerHTML = "No YouTube Video!";
+   }
+ }
 
 /**
  * Gets the URL of the video
@@ -100,10 +112,56 @@ function getData(){
 
   // Get video URL
   EF.getURL( videoURL );
+
+  getDescription();
 }
 
 function injectScript(){
   chrome.tabs.executeScript(null, {file: "Scripts/content.js"});
+}
+
+function updateHeader(url){
+  var elem = document.getElementById("actionHeader");
+  if(url == "ERROR"){
+    elem.innerHTML = "No YouTube Video!";
+    return false;
+  }else{
+    elem.innerHTML = "Timemark Saved!";
+    return true;
+  }
+}
+
+function getDescription(){
+  desc = document.getElementById("descriptionField");
+}
+
+//saveInfo blocks a thread until the information has been accumulated
+//this is usually about 25 ms. This is the safest way to do this though
+function saveInfo(){
+  if(title == "swag" || time == "swag" || id == "swag" || desc == "swag" || url == "swag"){
+    console.log(" -!- timing out for 1ms...");
+    setTimeout(saveInfo, 1);
+    return;
+  }
+  var currentURL = buildURL();
+
+  if(!updateHeader(currentURL)){
+    return;
+  }
+
+  /*console.log({'id': id});
+  console.log({'title': title});
+  console.log({'time': time});
+  console.log({'currentURL': currentURL});
+  console.log({'desc': desc});
+*/
+
+  tm = new YTTimemark(id, title, time, currentURL, desc);
+
+  console.log("SAVEINFO: title: " + title + " | time: " + time);
+
+  //saves the timemark to the sync storage
+  appStorage.save(tm);
 }
 
 //************************
@@ -111,6 +169,7 @@ function injectScript(){
 /*
  * Main code
  */
+
 injectScript();
 getData();
 
@@ -134,6 +193,11 @@ if(title == "swag" || desc == "swag" || time == "swag" || id == "swag" || url ==
 //Builds current time URL by convert HH:MM:SS format to seconds and
 //concat it to the video url.
 function buildURL() {
+  if(time == -1){
+    return "ERROR";
+  }
+  console.log("time: ");
+  console.log(time);
   var t = time.split(':');
   var seconds;
   if(t.length == 3) {
@@ -152,34 +216,27 @@ function buildURL() {
 //the timemark variable
 var tm;
 
-//saveInfo blocks a thread until the information has been accumulated
-//this is usually about 25 ms. This is the safest way to do this though
-function saveInfo(){
-  if(title == "swag" || time == "swag" || id == "swag" || desc == "swag" || url == "swag"){
-    console.log(" -!- timing out for 1ms...");
-    setTimeout(saveInfo, 1);
-    return;
-  }
-  var currentURL = buildURL();
-
-  tm = new YTTimemark(id, title, time, currentURL, "DEFAULT DESCRIPTION");
-
-  console.log("SAVEINFO: title: " + title + " | time: " + time);
-
-  //saves the timemark to the sync storage
-  appStorage.save(tm);
-}
-
 saveInfo(); //thread created
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  //handles the clicking of the manager button in the popup
   var managerButton = document.getElementById('managerButton');
   managerButton.addEventListener('click', function(){
     chrome.tabs.create({active: true, url: chrome.extension.getURL('manager.html')});
   });
 
+  //if the done button is clicked, that means we need to update the description
   var doneButton = document.getElementById('doneButton');
   doneButton.addEventListener('click', function(){
-    console.log("timark info: " + timemark.getTitle() + " | " + timemark.getTime());
+    //console.log("timark info: " + timemark.getTitle() + " | " + timemark.getTime());
+    desc = document.getElementById("descriptionField").value;
+    tm.setDescription(desc);
+    appStorage.save(tm);
+
+    //close the window
+    console.log("trying to close window!");
+    window.close();
+    console.log("wtf close you bastard");
   });
 });

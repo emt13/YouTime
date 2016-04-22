@@ -17,7 +17,7 @@ YTManager.prototype.populatePage = function(timemarks){
     vid.setAttribute("class", "accordian");
 
     vid.appendChild( document.createTextNode(video.getTitle()) );
-	
+
 	var removeButton =  document.createElement("BUTTON");
     removeButton.appendChild(document.createTextNode("Remove"));
     removeButton.setAttribute("video", timemarks[sortedKeys[i]]);
@@ -29,11 +29,12 @@ YTManager.prototype.populatePage = function(timemarks){
     });
 
     vid.appendChild(removeButton);
-    
+
+
     var tmlist = document.createElement("ul");
-    
+
     var marks = video.getTimemarks();
-    
+
     for(var j = 0; j < marks.length; j++) {
       var mark = marks[j];
       var li = document.createElement("li");
@@ -41,7 +42,12 @@ YTManager.prototype.populatePage = function(timemarks){
 
       //sets the href to the youtube link
       a.setAttribute("href", mark['url']);
-      var hyperlink = mark['desc'] + " - " + mark['time'];
+      var hyperlink = mark['time'] + " - ";
+      if(mark['desc'] != null){
+        hyperlink = hyperlink + mark['desc'];
+      }else{
+        hyperlink = hyperlink + " < No Description >";
+      }
       a.appendChild(document.createTextNode(hyperlink));
       li.appendChild(a);
 
@@ -54,7 +60,7 @@ YTManager.prototype.populatePage = function(timemarks){
       }, false);
 
       li.appendChild(shareButton);
-	  
+
 	  var removeTime = document.createElement("BUTTON");
       removeTime.appendChild(document.createTextNode("Remove"));
       removeTime.setAttribute("timemark", mark);
@@ -81,9 +87,9 @@ YTManager.prototype.populatePage = function(timemarks){
 
       tmlist.appendChild(li);
     }
-  
+
     vid.appendChild( tmlist )
-    
+
     document.body.appendChild( vid );
 
   }
