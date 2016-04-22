@@ -60,10 +60,21 @@ YTStorage.prototype.save = function(tm)
         var other = arr[i];
         console.log(other);
         //console.log(" -- Check time: " + convertHMStoS(other['time']) + " > " + convertHMStoS(tm.getTime()));
-        if(other['time'] == tm.getTime()){
+        if(other['time'] == tm.getTime() && other['desc'] == tm.getDescription()){
           console.log("timemark already exists at " + other['time'] + " for this video!");
           return;
         }
+
+        //check if the times are the same. The descriptions will obviously be
+        //different because of the previous if statement
+        if(other['time'] == tm.getTime()){
+          tmObj['desc'] = tm.getDescription();
+          arr[i] = tmObj;
+          inserted = true;
+          break;
+        }
+
+        //check if the time should be inserted in the previous position
         if(convertHMStoS(other['time']) > convertHMStoS(tm.getTime())){
           console.log("saving timemark!");
           inserted = true;

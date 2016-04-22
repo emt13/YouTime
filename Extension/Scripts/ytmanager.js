@@ -17,11 +17,11 @@ YTManager.prototype.populatePage = function(timemarks){
     vid.setAttribute("class", "accordian");
 
     vid.appendChild( document.createTextNode(video.getTitle()) );
-    
+
     var tmlist = document.createElement("ul");
-    
+
     var marks = video.getTimemarks();
-    
+
     for(var j = 0; j < marks.length; j++) {
       var mark = marks[j];
       var li = document.createElement("li");
@@ -29,7 +29,10 @@ YTManager.prototype.populatePage = function(timemarks){
 
       //sets the href to the youtube link
       a.setAttribute("href", mark['url']);
-      var hyperlink = mark['desc'] + " - " + mark['time'];
+      var hyperlink = mark['time'] + " - ";
+      if(mark['desc'] == null){
+        hyperlink = hyperlink + mark['desc'];
+      }
       a.appendChild(document.createTextNode(hyperlink));
       li.appendChild(a);
 
@@ -58,9 +61,9 @@ YTManager.prototype.populatePage = function(timemarks){
       */
       tmlist.appendChild(li);
     }
-  
+
     vid.appendChild( tmlist )
-    
+
     document.body.appendChild( vid );
 
   }
