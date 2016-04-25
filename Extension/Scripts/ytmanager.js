@@ -61,22 +61,28 @@ YTManager.prototype.populatePage = function(timemarks){
 
       li.appendChild(shareButton);
 
-	  var removeTime = document.createElement("BUTTON");
+	    var removeTime = document.createElement("BUTTON");
       removeTime.appendChild(document.createTextNode("Remove"));
+      //store information in the remove button (holds information to be used in the click callback)
       removeTime.setAttribute("timemark", mark);
-      removeTime.setAttribute("time", mark["id"]);
+      removeTime.setAttribute("time", mark['time']);
+      removeTime.setAttribute("id", mark['id']);
       removeTime.addEventListener("click", function() {
+        //go through all of the keys and check if the id is correct
         for(var i = 0; i < sortedKeys.length; i++) {
-          if(sortedKeys[i] == mark["id"]) {
+          if(sortedKeys[i] == this.getAttribute("id")) {
+            var removedTime = this.getAttribute("time");
+
+            //find the correct timemark and then remove it
             for(var j = 0; j < timemarks[sortedKeys[i]]['timemarks'].length; j++) {
-              if(timemarks[sortedKeys[i]]['timemarks'][j]['time'] == mark['time']) {
+              if(timemarks[sortedKeys[i]]['timemarks'][j]['time'] == removedTime) {
                 timemarks[sortedKeys[i]]['timemarks'].splice(j,1);
-                chrome.storage.sync.set(timemarks);
                 if(timemarks[sortedKeys[i]]['timemarks'].length == 0) {
-                   chrome.storage.sync.remove(sortedKeys[i]);
+                  chrome.storage.sync.remove(sortedKeys[i]);
+                }else{
+                  chrome.storage.sync.set(timemarks);
                 }
                 window.location.reload();
-                console.log("REMOVED");
               }
             }
           }
