@@ -113,18 +113,23 @@ YTManager.prototype.populatePage = function(videos){
 
       li.appendChild(removeTime);
 	  
+	  // edit button for editing the escription
 	  var editButton = document.createElement("BUTTON");
 	  editButton.appendChild(document.createTextNode("Edit"));
+	  // store information in button for use on click
 	  editButton.setAttribute("timemark", mark);
 	  editButton.setAttribute("time", mark['time']);
       editButton.setAttribute("id", mark['id']);
 	  editButton.setAttribute("description", mark['desc']);
 	  editButton.addEventListener("click", function() {
+		  // prompt user for new description
 		  var newDesc = window.prompt("Please Enter Your New Description");
+		  // go through all of the keys and check if the id is correct
 		  for(var i = 0; i < sortedKeys.length; i++) {
 			if(sortedKeys[i] == this.getAttribute("id")) {
 			  var editTime = this.getAttribute("time");
 			  
+			  //find the correct timemark and then change its description
 			  for(var j = 0; j < videos[sortedKeys[i]]['timemarks'].length; j++) {
 				if(videos[sortedKeys[i]]['timemarks'][j]['time'] == editTime) {
 				  videos[sortedKeys[i]]['timemarks'][j]['desc'] = newDesc;
