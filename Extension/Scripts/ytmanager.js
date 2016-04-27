@@ -122,23 +122,26 @@ YTManager.prototype.populatePage = function(videos){
       editButton.setAttribute("id", mark['id']);
 	  editButton.setAttribute("description", mark['desc']);
 	  editButton.addEventListener("click", function() {
-		  // prompt user for new description
-		  var newDesc = window.prompt("Please Enter Your New Description");
-		  // go through all of the keys and check if the id is correct
-		  for(var i = 0; i < sortedKeys.length; i++) {
-			if(sortedKeys[i] == this.getAttribute("id")) {
-			  var editTime = this.getAttribute("time");
+		// prompt user for new description
+		var newDesc = window.prompt("Please Enter Your New Description");
+		if(newDesc == null) {
+		  return;
+		}
+		// go through all of the keys and check if the id is correct
+		for(var i = 0; i < sortedKeys.length; i++) {
+		  if(sortedKeys[i] == this.getAttribute("id")) {
+		    var editTime = this.getAttribute("time");
 			  
-			  //find the correct timemark and then change its description
-			  for(var j = 0; j < videos[sortedKeys[i]]['timemarks'].length; j++) {
-				if(videos[sortedKeys[i]]['timemarks'][j]['time'] == editTime) {
-				  videos[sortedKeys[i]]['timemarks'][j]['desc'] = newDesc;
-				  chrome.storage.sync.set(videos);
-				  window.location.reload();
-				}
+		    //find the correct timemark and then change its description
+			for(var j = 0; j < videos[sortedKeys[i]]['timemarks'].length; j++) {
+			  if(videos[sortedKeys[i]]['timemarks'][j]['time'] == editTime) {
+				videos[sortedKeys[i]]['timemarks'][j]['desc'] = newDesc;
+				chrome.storage.sync.set(videos);
+				window.location.reload();
 			  }
 			}
 		  }
+		}
 	  });
 	  
 	  li.appendChild(editButton);
