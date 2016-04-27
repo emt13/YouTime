@@ -112,6 +112,31 @@ YTManager.prototype.populatePage = function(videos){
       });
 
       li.appendChild(removeTime);
+	  
+	  var editButton = document.createElement("BUTTON");
+	  editButton.appendChild(document.createTextNode("Edit"));
+	  editButton.setAttribute("timemark", mark);
+	  editButton.setAttribute("time", mark['time']);
+      editButton.setAttribute("id", mark['id']);
+	  editButton.setAttribute("description", mark['desc']);
+	  editButton.addEventListener("click", function() {
+		  var newDesc = window.prompt("Please Enter Your New Description");
+		  for(var i = 0; i < sortedKeys.length; i++) {
+			if(sortedKeys[i] == this.getAttribute("id")) {
+			  var editTime = this.getAttribute("time");
+			  
+			  for(var j = 0; j < videos[sortedKeys[i]]['timemarks'].length; j++) {
+				if(videos[sortedKeys[i]]['timemarks'][j]['time'] == editTime) {
+				  videos[sortedKeys[i]]['timemarks'][j]['desc'] = newDesc;
+				  chrome.storage.sync.set(videos);
+				  window.location.reload();
+				}
+			  }
+			}
+		  }
+	  });
+	  
+	  li.appendChild(editButton);
 
       tmlist.appendChild(li);
     }
