@@ -1,18 +1,13 @@
+//Constructor
 function YTStorage() {
   this.latestTM = "";
-
-  /*this.checkDuplicateTimemark = function(arr, tm){
-    for (var i = 0; i < arr.length; i++) {
-      var other = arr[i];
-      if(other.getTime() == tm.getTime()){
-        return true;
-      }
-    }
-    return false;
-  }*/
-
 }
 
+/**
+ * Function to convert the time of the video to seconds
+ * @param str the time of the video in HMS format
+ * @return the seconds elapsed of the video
+ */
 function convertHMStoS(str){
   var t = str.split(':');
   var seconds;
@@ -25,6 +20,10 @@ function convertHMStoS(str){
   return seconds;
 }
 
+/**
+ * Function to save a timemark to storage
+ * @param tm the timemark to save
+ */
 YTStorage.prototype.save = function(tm)
 {
   var id = tm.getId();
@@ -102,11 +101,3 @@ YTStorage.prototype.save = function(tm)
     }
   });
 }
-
-/*Storage.prototype = {
-  constructor: Storage,
-  getVideos:function() { return this.videos; }
-  add(video):function() {
-    this.videos.push(video);
-  }
-}*/

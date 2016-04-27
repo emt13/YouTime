@@ -11,7 +11,6 @@
 // Constructor to this class
 function YTEventFacade()
 {
-  // TODO: Find some way to make this private!
   // Because this is asynchronous, need a callback to manipulate the data that is received
   this.sendEvent = function(message, callback) {
     chrome.tabs.query( {active: true, currentWindow: true}, function(tabs) {

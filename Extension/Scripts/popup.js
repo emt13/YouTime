@@ -10,6 +10,9 @@
  * @since 2016-04-01
  */
 
+
+// Variables to hold Timemark information
+// populated with temp values
 var title = "swag";
 var time = "swag";
 var desc = "swag";
@@ -17,6 +20,7 @@ var id = "swag";
 var url = "swag";
 
 
+// Create an instance of our Storage class
 var appStorage = new YTStorage();
 
 // Creation of the EventFacade class
@@ -72,7 +76,7 @@ function videoURL(val) {
   url = val;
 }
 
-/*
+/**
  * Saves a timemark by checking if it has a video object already
  * if not then it creates one and stores everything properly.
  * @param st stamp
@@ -116,10 +120,17 @@ function getData(){
   getDescription();
 }
 
+// Injects content into YouTube page
 function injectScript(){
   chrome.tabs.executeScript(null, {file: "Scripts/content.js"});
 }
 
+/**
+ * Updates the header in the popup if 
+ * page isn't on a YouTube video
+ * @param url the url of the video or and error string
+ * @return boolean value representing that the page is a YouTube video
+ */
 function updateHeader(url){
   var elem = document.getElementById("actionHeader");
   if(url == "ERROR"){
@@ -131,6 +142,7 @@ function updateHeader(url){
   }
 }
 
+//Gets the custom description defined by the user
 function getDescription(){
   desc = document.getElementById("descriptionField");
 }
@@ -143,19 +155,14 @@ function saveInfo(){
     setTimeout(saveInfo, 1);
     return;
   }
+  // Build the timelink url
   var currentURL = buildURL();
-
+  // checks if url is a YouTube video
   if(!updateHeader(currentURL)){
     return;
   }
-
-  /*console.log({'id': id});
-  console.log({'title': title});
-  console.log({'time': time});
-  console.log({'currentURL': currentURL});
-  console.log({'desc': desc});
-*/
-
+	
+  // creates the timemark of a video
   tm = new YTTimemark(id, title, time, currentURL, desc);
 
   console.log("SAVEINFO: title: " + title + " | time: " + time);
@@ -178,6 +185,7 @@ console.log("desc: " + desc);
 console.log("time: " + time);
 console.log("id: " + id);
 console.log("url: " + url);
+
 if(title == "swag" || desc == "swag" || time == "swag" || id == "swag" || url == "swag"){
   setTimeout(function(){}, 1);
   injectScript();
