@@ -187,7 +187,7 @@ function recurseFileSystem(node, indent){
   for(var i = 0; i < node['children'].length; i++){
     if(node['children'][i]['type'] == "video"){
       //display the video
-      buildVideoElement(node['children'][i], indent);
+      buildVideoElement(node['children'][i], "");
     }else{
       buildFolderElement(node['children'][i], indent);
       recurseFileSystem(node['children'][i], indent + " - ");

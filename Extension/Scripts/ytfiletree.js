@@ -168,7 +168,8 @@ YTFileTree.prototype.removeTimemark = function(timemark, root){
     //go through the node, check if the children are videos, if they are check them
     for(property in node){
       if(property == 'children'){
-        for(var i = 0; i < node[property].length; i++){
+        var size = node[property].length;
+        for(var i = 0; i < size; i++){
           //if this is the video, we want to insert
           if(node[property][i]['type'] == 'video'){
             console.log("video: " + node[property][i]['id'] + " - " + node[property][i]['timemarks'].length);
@@ -187,7 +188,7 @@ YTFileTree.prototype.removeTimemark = function(timemark, root){
               return true;
             }
           }else{ //only option here is it is a folder
-            removeTMHelper(timemark, node[property][i]);
+            //removeTMHelper(timemark, node[property][i]);
           }
         }
       }
@@ -218,20 +219,77 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
     "URL" : timemark.getUrl(),
     "desc" : timemark.getDescription()
   };
-  console.log(timemark);
+  //console.log(timemark);
+/*
+  var queue = new Queue();
+  queue.push(root);
+
+  var inserted = false;
+  while(queue.size() > 0 && !inserted){
+    var node = queue.pop();
+    for(var i = 0; i < node['children'].length; i++){
+      if(node['children'][i]['type'] == "video"){
+        if(node['children'][i]['id'] == mark['id']){
+          console.log(node['children'][i]['type']);
+          var elem = node['children'][i];
+          console.log(elem.length);
+          console.log(elem['name']);
+          for(var j = 0; j < node['children'][i]['timemarks'].length; j++){
+            if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) > convertHMStoS(mark['time'])){
+              node['children'][i]['timemarks'].splice(j, 0, mark);
+              inserted = true;
+              j = node['children'][i]['timemarks'].length;
+              i = node['children'].length;
+            }else if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) == convertHMStoS(mark['time'])){
+              if(node['children'][i]['timemarks'][j]['desc'] != mark['desc']){
+                node['children'][i]['timemarks'][j]['desc'] = mark['desc'];
+                inserted = true;
+                j = node['children'][i]['timemarks'].length;
+                i = node['children'].length;
+              }else{
+                return true;
+              }
+            }
+          }
+          if(!inserted){
+            node['children'][i]['timemarks'].push(mark);
+          }
+
+          return true;
+        }
+      }else{
+        queue.push(node['children'][i]);
+      }
+    }
+  }
+
+  if(!inserted){
+    console.log(" building a new video!");
+    var videoObj = {
+      "type" : "video",
+      "name" : name,
+      "timemarks" : [mark],
+      "id" : mark['id']
+    };
+
+    node['children'].push(videoObj);
+  }*/
 
   function insertHelper(node){
-    console.log("node: " + node['children'].length);
-    console.log(node);
+
+    console.log("NOW CHECKING IN NODE: "+ node['name'])
     var ret = false;
     //go through the node, check if the children are videos, if they are check them
     for(property in node){
       if(property == 'children'){
-        for(var i = 0; i < node[property].length; i++){
-          console.log(" -- ");
+        console.log("--");
+        var size = node[property].length;
+        console.log(node[property].length + " = " + size);
+        for(var i = 0; i < size; i++){
+          console.log(" ** ");
           console.log(node[property][i]);
           //if this is the video, we want to insert
-          if(node[property][i]['type'] == 'video'){
+          if(node[property][i]['type'] == "video"){
             if(node[property][i]['id'] == timemark['id']){
               var inserted = false;
               for(var j = 0; j < node[property][i]['timemarks'].length; j++){
@@ -257,7 +315,7 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
             }
             //return true;
           }else{ //only option here is it is a folder
-            ret |= insertHelper(timemark, name, node[property][i]);
+            //ret |= insertHelper(timemark, name, node[property][i]);
           }
         }
       }
@@ -272,9 +330,10 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
     	var videoObj = {
       	"type" : "video",
         "name" : name,
-        "timemarks" : [timemark],
+        "timemarks" : [],
         "id" : timemark['id']
       };
+      videoObj['timemarks'].push(timemark);
 
       node['children'].push(videoObj);
     }

@@ -8,12 +8,45 @@
  * @since 2016-04-01
  */
 
-class YTTimemark {
+function YTTimemark(id, title, time, url, desc) {
+  this.id = id;
+  this.title = title;
+  this.time = time;
+  this.description = desc;
+  this.url = url;
+}
+
+YTTimemark.prototype.getId = function(){
+  return this.id;
+}
+
+YTTimemark.prototype.getTitle = function(){
+  return this.title;
+}
+
+YTTimemark.prototype.getTime = function(){
+  return this.time;
+}
+
+YTTimemark.prototype.getDescription = function(){
+  return this.description;
+}
+
+YTTimemark.prototype.setDescription = function(val){
+  this.description = val;
+}
+
+YTTimemark.prototype.getUrl = function(){
+  return this.url;
+}
+
+
+//class YTTimemark {
 
   /*
    * Constructor.
    */
-  constructor(id, title, time, url, desc) {
+/*  constructor(id, title, time, url, desc) {
     this.id = id;
     this.title = title;
     this.time = time;
@@ -32,4 +65,4 @@ class YTTimemark {
   setDescription(val) { this.description = val; }
 
   getUrl() { return this.url; }
- }
+}*/
