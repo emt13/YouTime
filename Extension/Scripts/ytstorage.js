@@ -20,84 +20,90 @@ function convertHMStoS(str){
   return seconds;
 }
 
+/*function checkRoot(obj){
+  if(obj == null){
+    setTimeout(function(){}, 1);
+    checkRoot(obj);
+  }
+}*/
+
 /**
  * Function to save a timemark to storage
  * @param tm the timemark to save
  */
 YTStorage.prototype.save = function(tm)
 {
-  var id = tm.getId();
-  var title = tm.getTitle();
-  var url = tm.getUrl();
-  var time = tm.getTime();
-  var desc = tm.getDescription();
-  var tmObj = {id, url, time, desc};
-  chrome.storage.sync.get(id, function(ret){
-    console.log(ret);
-    if(ret[id] == null){
-      console.log("Adding new video! " + id);
 
-      //need to create new video obj
-      var obj = {};
+  function SaveLogic(fstoreObj){
+    var fileTree = new YTFileTree(fstoreObj['fstoreRoot']);
+    var root = fstoreObj['fstoreRoot'];
+    fileTree.insertTimemark(tm, root);
+    fstoreObj['fstoreRoot'] = root;
+    chrome.storage.sync.set(fstoreObj, function(){
+      console.log("Saved timemark to root!");
+      console.log(fstoreObj['fstoreRoot']);
+    });
+  }
 
-      var arr = {'title' : title, 'timemarks' : [ tmObj ] } ;
-      obj[id] = arr;
-
-      chrome.storage.sync.set(obj, function(){
-        console.log("saved!");
-        console.log(obj);
+  //get the root from the sync storage
+  chrome.storage.sync.get('fstoreRoot', function(ret){
+    //if the root hasn't been created yet, add it
+    if(ret['fstoreRoot'] == null){
+      var rootObj = {};
+      rootObj['fstoreRoot'] = {
+        "type" : "folder",
+        "name" : "root",
+        "children" : []
+      };
+      chrome.storage.sync.set(rootObj, function(){
+        console.log(" created root!");
+        console.log(rootObj['fstoreRoot']);
+        SaveLogic(rootObj);
       });
-
     }else{
-      //ret is the object that is returned by the call
-      var arr = ret[id]['timemarks'];
-      var inserted = false;
-      //check if the array already contains the same timemark
-      //Assume the arr is in order of ascending time.
-      //if it passes the time, insert it at the previous index
-      for (var i = 0; i < arr.length; i++) {
-        var other = arr[i];
-        console.log(other);
-        //console.log(" -- Check time: " + convertHMStoS(other['time']) + " > " + convertHMStoS(tm.getTime()));
-        if(other['time'] == tm.getTime() && other['desc'] == tm.getDescription()){
-          console.log("timemark already exists at " + other['time'] + " for this video!");
-          return;
-        }
-
-        //check if the times are the same. The descriptions will obviously be
-        //different because of the previous if statement
-        if(other['time'] == tm.getTime()){
-          tmObj['desc'] = tm.getDescription();
-          arr[i] = tmObj;
-          inserted = true;
-          break;
-        }
-
-        //check if the time should be inserted in the previous position
-        if(convertHMStoS(other['time']) > convertHMStoS(tm.getTime())){
-          console.log("saving timemark!");
-          inserted = true;
-          arr.splice(i, 0, tmObj);
-          i = arr.length;
-          break;
-        }
-      }
-
-      if(!inserted){
-        arr.push(tmObj);
-      }
-
-      //rebuild the json
-      var obj = {};
-      var data = {'title' : title, 'timemarks' :  arr };
-      obj[id] = data;
-
-      //store it in the chrome storage. Replaces the existing object with the
-      //old timemark array in it
-      chrome.storage.sync.set(obj, function(){
-        console.log("Saved object: ");
-        console.log(obj);
-      });
+      console.log(" successfully fetched root!");
+      console.log(ret);
+      SaveLogic(ret);
     }
+  });
+}
+
+YTStorage.prototype.removeTimemark = function(tm){
+  chrome.storage.sync.get('fstoreRoot', function(ret){
+    if(ret['fstoreRoot'] == null){
+      console.log("ERROR: fstoreRoot could not be found!" );
+      return;
+    }
+
+    var fileTree = new YTFileTree(ret['fstoreRoot']);
+    var root = ret['fstoreRoot'];
+    console.log("driver function:");
+    console.log(tm);
+    fileTree.removeTimemark(tm, root);
+    ret['fstoreRoot'] = root;
+    chrome.storage.sync.set(ret, function(){
+      console.log("Removed Timemark from Root!");
+      console.log(ret['fstoreRoot']);
+    });
+  });
+}
+
+YTStorage.prototype.removeVideo = function(videoID){
+  chrome.storage.sync.get('fstoreRoot', function(ret){
+    if(ret['fstoreRoot'] == null){
+      console.log("ERROR: fstoreRoot could not be found!" );
+      return;
+    }
+
+    var fileTree = new YTFileTree(ret['fstoreRoot']);
+    var root = ret['fstoreRoot'];
+    console.log("driver function:");
+    console.log(videoID);
+    fileTree.removeVideo(videoID, root);
+    ret['fstoreRoot'] = root;
+    chrome.storage.sync.set(ret, function(){
+      console.log("Removed Video from Root!");
+      console.log(ret['fstoreRoot']);
+    });
   });
 }

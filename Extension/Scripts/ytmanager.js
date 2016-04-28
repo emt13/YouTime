@@ -11,15 +11,117 @@
 //Constructor for this class
 function YTManager(doc) {
   console.log("Created the manager!");
+  //this.appStorage = new YTStorage();
   this.document = doc;
+}
+
+function buildVideoElement(video, indent){
+  //create the element that holds all of the data
+  var vid = document.createElement("div");
+  vid.appendChild( document.createTextNode(indent + video['name']));
+
+  //create the remove button for the video
+  var removeButton =  document.createElement("BUTTON");
+    removeButton.appendChild(document.createTextNode("Remove"));
+    removeButton.setAttribute("video", video['name']);
+    removeButton.setAttribute("id", video['id']);
+    removeButton.addEventListener("click", function() {
+      var appStorage = new YTStorage();
+      appStorage.removeVideo(this.getAttribute("id"));
+      window.location.reload();
+      console.log("removed");
+    });
+
+  vid.appendChild(removeButton);
+
+  // create list element for timelink display
+  var tmlist = document.createElement("ul");
+
+  // get the timemarks for each video
+  var marks = video['timemarks'];
+
+  for(var j = 0; j < marks.length; j++) {
+    var mark = marks[j];
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+
+    //sets the href to the youtube link
+    a.setAttribute("href", mark['URL']);
+    var hyperlink = indent + mark['time'] + " - ";
+    if(mark['desc'] != null){
+      hyperlink = hyperlink + mark['desc'];
+    }else{
+      hyperlink = hyperlink + " < No Description >";
+    }
+    a.appendChild(document.createTextNode(hyperlink));
+    li.appendChild(a);
+
+    //creates the share button. Adds a listener that allows you to copy the link
+    var shareButton = document.createElement("BUTTON");
+    shareButton.appendChild(document.createTextNode("Share"));
+    shareButton.setAttribute("url", mark['URL']);
+    shareButton.addEventListener("click", function() {
+      window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
+    }, false);
+
+    li.appendChild(shareButton);
+
+  // Add remove button to the timemarks
+  var removeTime = document.createElement("BUTTON");
+    removeTime.appendChild(document.createTextNode("Remove"));
+    //store information in the remove button (holds information to be used in the click callback)
+    removeTime.setAttribute("time", mark['time']);
+    removeTime.setAttribute("id", mark['id']);
+    removeTime.addEventListener("click", function() {
+      var appStorage = new YTStorage();
+      console.log("attribute");
+      console.log(this.getAttribute("time") + " - "+ this.getAttribute("id"));
+      appStorage.removeTimemark({
+        "id": this.getAttribute("id"),
+        "time": this.getAttribute("time")
+      });
+      window.location.reload();
+    });
+
+    li.appendChild(removeTime);
+
+    tmlist.appendChild(li);
+  }
+
+  vid.appendChild( tmlist )
+
+  document.body.appendChild( vid );
+
+}
+
+function recurseFileSystem(node, indent){
+  if(node['name'] != "root"){
+    //create folder div
+  }
+
+  for(var i = 0; i < node['children'].length; i++){
+    if(node['children'][i]['type'] == "video"){
+      //display the video
+      buildVideoElement(node['children'][i], indent);
+    }else{
+      recurseFileSystem(node['children'][i], indent + "  ");
+    }
+  }
 }
 
 // Populate Page function that grabs video objects from storage and
 // then populates the manager page with them and their timelinks.
 // share and remove buttons are also added.
-YTManager.prototype.populatePage = function(videos){
+YTManager.prototype.populatePage = function(returnVal){
+
+  var root = returnVal['fstoreRoot'];
+  console.log("root");
+  console.log(root);
+
+  recurseFileSystem(root, "");
+/*
   console.log(videos);
-  
+
   // Grab the sorted keys (video IDs) from storage
   var sortedKeys = Object.keys(videos).sort();
   for(var i = 0; i < sortedKeys.length; i++){
@@ -28,15 +130,15 @@ YTManager.prototype.populatePage = function(videos){
     var video = new YTVideo(videos[sortedKeys[i]]);
     console.log(" -- video:");
     console.log(video);
-	
+
 	// Add each video to the manager
     var vid = document.createElement("div");
     vid.setAttribute("class", "accordian");
-	
+
 	// Add the video name
     vid.appendChild( document.createTextNode(video.getTitle()) );
-	
-	// create remove button for video that will 
+
+	// create remove button for video that will
 	// remove all timemarks associated with that video
 	var removeButton =  document.createElement("BUTTON");
     removeButton.appendChild(document.createTextNode("Remove"));
@@ -54,7 +156,7 @@ YTManager.prototype.populatePage = function(videos){
     var tmlist = document.createElement("ul");
 	// get the timemarks for each video
     var marks = video.getTimemarks();
-	
+
 	// Add each timemark to the list
     for(var j = 0; j < marks.length; j++) {
       var mark = marks[j];
@@ -81,7 +183,7 @@ YTManager.prototype.populatePage = function(videos){
       }, false);
 
       li.appendChild(shareButton);
-	  
+
 	  // Add remove button to the timemarks
 	  var removeTime = document.createElement("BUTTON");
       removeTime.appendChild(document.createTextNode("Remove"));
@@ -120,6 +222,6 @@ YTManager.prototype.populatePage = function(videos){
 
     document.body.appendChild( vid );
 
-  }
+  }*/
 
 }

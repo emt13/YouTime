@@ -11,8 +11,8 @@
  * @since 2016-04-06
  */
 
-/** 
- * Function that displays an alert message 
+/**
+ * Function that displays an alert message
  * to prompt a user to copy and paste an URL
  * @param url the URL of the timelink
  */
@@ -29,7 +29,10 @@ var manager = new YTManager(document);
 // When page is loaded, this listener populates the HTML
 // so that the timlinks appear in the mamanger
 document.addEventListener('DOMContentLoaded', function () {
-  chrome.storage.sync.get(null, manager.populatePage);
+  //send the root of our file tree to the manager
+  chrome.storage.sync.get('fstoreRoot', manager.populatePage);
+
+  var newFolderButton = document.getElementById('newFolderROOT');
 
   var clearButton = document.getElementById('clearButton');
     // Povides the clear button with its functionality

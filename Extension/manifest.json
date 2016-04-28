@@ -10,14 +10,6 @@
     "128": "Images/icon64.png"
   },
 
-  "background": {
-    "persistent": false,
-    "scripts": [
-      "Scripts/jquery-2.2.2.min.js",
-      "Scripts/background.js"
-    ]
-  },
-
   "permissions": [
     "tabs",
     "https://*/*",
@@ -42,7 +34,6 @@
         "https://www.youtube.com/watch?*"
       ],
       "js": [
-        "Scripts/jquery-2.2.2.min.js",
         "Scripts/content.js"
       ],
       "run_at": "document_start"

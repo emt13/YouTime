@@ -126,7 +126,7 @@ function injectScript(){
 }
 
 /**
- * Updates the header in the popup if 
+ * Updates the header in the popup if
  * page isn't on a YouTube video
  * @param url the url of the video or and error string
  * @return boolean value representing that the page is a YouTube video
@@ -161,7 +161,7 @@ function saveInfo(){
   if(!updateHeader(currentURL)){
     return;
   }
-	
+
   // creates the timemark of a video
   tm = new YTTimemark(id, title, time, currentURL, desc);
 
@@ -180,22 +180,22 @@ function saveInfo(){
 injectScript();
 getData();
 
-console.log("title: " + title);
+/*console.log("title: " + title);
 console.log("desc: " + desc);
 console.log("time: " + time);
 console.log("id: " + id);
 console.log("url: " + url);
-
+*/
 if(title == "swag" || desc == "swag" || time == "swag" || id == "swag" || url == "swag"){
   setTimeout(function(){}, 1);
   injectScript();
   getData();
 
-  console.log(" - title: " + title);
+  /*console.log(" - title: " + title);
   console.log(" - desc: " + desc);
   console.log(" - time: " + time);
   console.log(" - id: " + id);
-  console.log(" - url: " + url);
+  console.log(" - url: " + url);*/
 }
 
 //Builds current time URL by convert HH:MM:SS format to seconds and
