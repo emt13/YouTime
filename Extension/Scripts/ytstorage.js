@@ -1,3 +1,13 @@
+/**
+ * Class that handles interactions with the file system.
+ * Makes it simpler to save, remove, rename, and move timemarks/videos/folders
+ *
+ * @author YouTime
+ * @version 1.0
+ * @since 2016-04-01
+ */
+
+
 //Constructor
 function YTStorage() {
   this.latestTM = "";
@@ -20,20 +30,13 @@ function convertHMStoS(str){
   return seconds;
 }
 
-/*function checkRoot(obj){
-  if(obj == null){
-    setTimeout(function(){}, 1);
-    checkRoot(obj);
-  }
-}*/
-
 /**
  * Function to save a timemark to storage
  * @param tm the timemark to save
  */
 YTStorage.prototype.save = function(tm)
 {
-
+  //basic logic behind saving a timemark
   function SaveLogic(fstoreObj){
     var fileTree = new YTFileTree(fstoreObj['fstoreRoot']);
     var root = fstoreObj['fstoreRoot'];
@@ -68,7 +71,10 @@ YTStorage.prototype.save = function(tm)
   });
 }
 
+//removes the given timemark from the filesystem
 YTStorage.prototype.removeTimemark = function(tm){
+
+  //gets the root and then starts the removal
   chrome.storage.sync.get('fstoreRoot', function(ret){
     if(ret['fstoreRoot'] == null){
       console.log("ERROR: fstoreRoot could not be found!" );
@@ -77,8 +83,6 @@ YTStorage.prototype.removeTimemark = function(tm){
 
     var fileTree = new YTFileTree(ret['fstoreRoot']);
     var root = ret['fstoreRoot'];
-    console.log("driver function:");
-    console.log(tm);
     fileTree.removeTimemark(tm, root);
     ret['fstoreRoot'] = root;
     chrome.storage.sync.set(ret, function(){
@@ -86,7 +90,9 @@ YTStorage.prototype.removeTimemark = function(tm){
   });
 }
 
+//removes a video by id from the filesystem
 YTStorage.prototype.removeVideo = function(videoID){
+  //get the root of the filesystem then proceed to remove the video
   chrome.storage.sync.get('fstoreRoot', function(ret){
     if(ret['fstoreRoot'] == null){
       console.log("ERROR: fstoreRoot could not be found!" );
@@ -97,29 +103,34 @@ YTStorage.prototype.removeVideo = function(videoID){
     var root = ret['fstoreRoot'];
     fileTree.removeVideo(videoID, root);
     ret['fstoreRoot'] = root;
+    //store the updated root
     chrome.storage.sync.set(ret, function(){
     });
   });
 }
 
+//removes a folder from the filesystem by name
 YTStorage.prototype.removeFolder = function(folderName){
+  //get the root of the filesystem and then proceed to remove the folder
   chrome.storage.sync.get('fstoreRoot', function(ret){
     if(ret['fstoreRoot'] == null){
       console.log("ERROR: fstoreRoot could not be found!" );
       return;
     }
-    console.log("trying to remove: " + folderName);
+
     var fileTree = new YTFileTree(ret['fstoreRoot']);
     var root = ret['fstoreRoot'];
-    fileTree.removeFolderAtPoint(folderName, root);
+    fileTree.removeFolder(folderName, root);
     ret['fstoreRoot'] = root;
+    //store the updated root
     chrome.storage.sync.set(ret, function(){
     });
   });
 }
 
-
+//remames a folder in the file system
 YTStorage.prototype.renameFolder = function(oldName, newName){
+  //get the root of the file system
   chrome.storage.sync.get('fstoreRoot', function(ret){
     if(ret['fstoreRoot'] == null){
       console.log("ERROR: fstoreRoot could not be found!" );
@@ -130,28 +141,47 @@ YTStorage.prototype.renameFolder = function(oldName, newName){
     var root = ret['fstoreRoot'];
     fileTree.renameFolder(oldName, newName, root);
     ret['fstoreRoot'] = root;
+    //store the updated root
     chrome.storage.sync.set(ret, function(){
-      console.log("Removed Video from Root!");
-      console.log(ret['fstoreRoot']);
     });
   });
 }
 
-
+//creates a folder at a target
 YTStorage.prototype.createFolder = function(folderName, targetName){
+  //get the root of the filesystem
   chrome.storage.sync.get('fstoreRoot', function(ret){
+    //need to check if the root already exists, if not, create it
     if(ret['fstoreRoot'] == null){
-      console.log("ERROR: fstoreRoot could not be found!" );
-      return;
+      var rootObj = {};
+      rootObj['fstoreRoot'] = {
+        "type" : "folder",
+        "name" : "root",
+        "children" : []
+      };
+      chrome.storage.sync.set(rootObj, function(){
+        //once the root has been created, insert the folder
+        var fileTree = new YTFileTree(ret['fstoreRoot']);
+        var root = ret['fstoreRoot'];
+        fileTree.createFolderAtPoint(folderName, targetName, root);
+        ret['fstoreRoot'] = root;
+        //store the updated root
+        chrome.storage.sync.set(ret, function(){
+          console.log("Removed Video from Root!");
+          console.log(ret['fstoreRoot']);
+        });
+      });
+    }else{
+      //go through the root and create the folder
+      var fileTree = new YTFileTree(ret['fstoreRoot']);
+      var root = ret['fstoreRoot'];
+      fileTree.createFolderAtPoint(folderName, targetName, root);
+      ret['fstoreRoot'] = root;
+      //store the updated root
+      chrome.storage.sync.set(ret, function(){
+        console.log("Removed Video from Root!");
+        console.log(ret['fstoreRoot']);
+      });
     }
-
-    var fileTree = new YTFileTree(ret['fstoreRoot']);
-    var root = ret['fstoreRoot'];
-    fileTree.createFolderAtPoint(folderName, targetName, root);
-    ret['fstoreRoot'] = root;
-    chrome.storage.sync.set(ret, function(){
-      console.log("Removed Video from Root!");
-      console.log(ret['fstoreRoot']);
-    });
   });
 }

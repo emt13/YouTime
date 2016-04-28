@@ -1,4 +1,10 @@
-//queue data structure for use in the tree structure
+/**
+ * Class representing a FIFO queue
+ *
+ * @author YouTime
+ * @version 1.0
+ * @since 2016-04-27
+ */
 
 function Queue(){
   this.elems = [];

@@ -15,54 +15,27 @@ function YTTimemark(id, title, time, url, desc) {
   this.description = desc;
   this.url = url;
 }
-
+//returns id
 YTTimemark.prototype.getId = function(){
   return this.id;
 }
-
+//returns title
 YTTimemark.prototype.getTitle = function(){
   return this.title;
 }
-
+//returns time
 YTTimemark.prototype.getTime = function(){
   return this.time;
 }
-
+//returns description
 YTTimemark.prototype.getDescription = function(){
   return this.description;
 }
-
+//saves a new description
 YTTimemark.prototype.setDescription = function(val){
   this.description = val;
 }
-
+//returns a url
 YTTimemark.prototype.getUrl = function(){
   return this.url;
 }
-
-
-//class YTTimemark {
-
-  /*
-   * Constructor.
-   */
-/*  constructor(id, title, time, url, desc) {
-    this.id = id;
-    this.title = title;
-    this.time = time;
-    this.description = desc;
-    this.url = url;
-  }
-
-  getId() { return this.id; }
-
-  getTitle() { return this.title; }
-
-  getTime() { return this.time; }
-
-  getDescription() { return this.description; }
-
-  setDescription(val) { this.description = val; }
-
-  getUrl() { return this.url; }
-}*/

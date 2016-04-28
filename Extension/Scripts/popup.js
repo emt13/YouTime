@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
   //if the done button is clicked, that means we need to update the description
   var doneButton = document.getElementById('doneButton');
   doneButton.addEventListener('click', function(){
-    //console.log("timark info: " + timemark.getTitle() + " | " + timemark.getTime());
+    //sets the new description and saves over the previous entry in the filesystem
     desc = document.getElementById("descriptionField").value;
     tm.setDescription(desc);
     appStorage.save(tm);

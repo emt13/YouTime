@@ -1,9 +1,18 @@
+/**
+ * Class used to manipulate the filesystem of YouTime
+ *
+ * @author YouTime
+ * @version 1.0
+ * @since 2016-04-27
+ */
+
 //used to traverse the tree used in storage
 
 function YTFileTree(inputRoot){
   this.root = inputRoot;
 }
 
+//converts time format of hh:mm:ss to seconds
 function convertHMStoS(str){
   var t = str.split(':');
   var seconds;
@@ -16,8 +25,10 @@ function convertHMStoS(str){
   return seconds;
 }
 
+//renames a folder in the filesystem
 YTFileTree.prototype.renameFolder = function(oldName, newName, root){
 
+  //uses a queue to hold all of the folders that need traversing
   var queue = new Queue();
 
   queue.push(root);
@@ -31,12 +42,13 @@ YTFileTree.prototype.renameFolder = function(oldName, newName, root){
           node['children'][i]['name'] = newName;
           return;
         }else{
+          //we need to check this folder for sub folders that need renaming
           queue.push(node['children'][i]);
         }
       }
     }
   }
-
+  // OLD VERSION ---- KEEP FOR TESTING PURPOSES
   /*
   function renameFolderHelper(node){
     //go through the node, check if the children are videos, if they are check them
@@ -58,8 +70,10 @@ YTFileTree.prototype.renameFolder = function(oldName, newName, root){
   renameFolderHelper(root);*/
 }
 
-YTFileTree.prototype.removeFolderAtPoint = function(folderName, root){
+//removes a folder
+YTFileTree.prototype.removeFolder = function(folderName, root){
 
+  //uses a queue to hold all of the folders that need traversing
   var queue = new Queue();
 
   queue.push(root);
@@ -70,6 +84,7 @@ YTFileTree.prototype.removeFolderAtPoint = function(folderName, root){
     for(var i = 0; i < node['children'].length; i++){
       if(node['children'][i]['type'] == "folder"){
         if(node['children'][i]['name'] == folderName){
+          //removes the folder from its parent folder
           node['children'].splice(i,1);
           return;
         }else{
@@ -78,7 +93,7 @@ YTFileTree.prototype.removeFolderAtPoint = function(folderName, root){
       }
     }
   }
-
+  // OLD VERSION ---- KEEP FOR TESTING PURPOSES
   /*function removeFolderHelper(node){
     //go through the node, check if the children are videos, if they are check them
     for(property in node){
@@ -99,7 +114,9 @@ YTFileTree.prototype.removeFolderAtPoint = function(folderName, root){
   removeFolderHelper(root);*/
 }
 
+//creates a fodler at a given target point
 YTFileTree.prototype.createFolderAtPoint = function(folderName, targetName, root){
+  //recursive target function
   function insertObjAtFolderHelper(obj, targetFolder, node){
 
     //corner case of inserting at root
@@ -124,7 +141,7 @@ YTFileTree.prototype.createFolderAtPoint = function(folderName, targetName, root
       }
     }
   }
-
+  //object used to represent folder
   var folderObj = {
     "type" : "folder",
     "name" : folderName,
@@ -133,8 +150,10 @@ YTFileTree.prototype.createFolderAtPoint = function(folderName, targetName, root
   insertObjAtFolderHelper(folderObj, targetName, root);
 }
 
+//removes a video by id from the filesystem
 YTFileTree.prototype.removeVideo = function(targetID, root){
 
+  //function to navigate the structure of the filesystem
   function removeVideoHelper(node){
     //go through the node, check if the children are videos, if they are check them
     for(property in node){
@@ -142,11 +161,12 @@ YTFileTree.prototype.removeVideo = function(targetID, root){
         for(var i = 0; i < node[property].length; i++){
           if(node[property][i]['type'] == 'video'){
           	if(node[property][i]['id'] == targetID){
+              //removes the video from its parent folder
           		node[property].splice(i, 1);
               return;
           	}
          	}else{
-          	removeVideoHelper(node[property][i]);
+          	//removeVideoHelper(node[property][i]);
          	}
         }
       }
@@ -158,12 +178,10 @@ YTFileTree.prototype.removeVideo = function(targetID, root){
 
 
 
-
+//remvoes a timemark from a video. If that video then has 0 timemarks, remove the video
 YTFileTree.prototype.removeTimemark = function(timemark, root){
 
-  console.log("trying to delete: ");
-  console.log(timemark);
-
+  //function to navigate the structure of the filesystem
   function removeTMHelper(node){
     //go through the node, check if the children are videos, if they are check them
     for(property in node){
@@ -220,60 +238,6 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
     "desc" : timemark.getDescription()
   };
   //console.log(timemark);
-/*
-  var queue = new Queue();
-  queue.push(root);
-
-  var inserted = false;
-  while(queue.size() > 0 && !inserted){
-    var node = queue.pop();
-    for(var i = 0; i < node['children'].length; i++){
-      if(node['children'][i]['type'] == "video"){
-        if(node['children'][i]['id'] == mark['id']){
-          console.log(node['children'][i]['type']);
-          var elem = node['children'][i];
-          console.log(elem.length);
-          console.log(elem['name']);
-          for(var j = 0; j < node['children'][i]['timemarks'].length; j++){
-            if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) > convertHMStoS(mark['time'])){
-              node['children'][i]['timemarks'].splice(j, 0, mark);
-              inserted = true;
-              j = node['children'][i]['timemarks'].length;
-              i = node['children'].length;
-            }else if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) == convertHMStoS(mark['time'])){
-              if(node['children'][i]['timemarks'][j]['desc'] != mark['desc']){
-                node['children'][i]['timemarks'][j]['desc'] = mark['desc'];
-                inserted = true;
-                j = node['children'][i]['timemarks'].length;
-                i = node['children'].length;
-              }else{
-                return true;
-              }
-            }
-          }
-          if(!inserted){
-            node['children'][i]['timemarks'].push(mark);
-          }
-
-          return true;
-        }
-      }else{
-        queue.push(node['children'][i]);
-      }
-    }
-  }
-
-  if(!inserted){
-    console.log(" building a new video!");
-    var videoObj = {
-      "type" : "video",
-      "name" : name,
-      "timemarks" : [mark],
-      "id" : mark['id']
-    };
-
-    node['children'].push(videoObj);
-  }*/
 
   function insertHelper(node){
 
@@ -292,12 +256,16 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
           if(node[property][i]['type'] == "video"){
             if(node[property][i]['id'] == timemark['id']){
               var inserted = false;
+              //go through all of the timemarks in the video
               for(var j = 0; j < node[property][i]['timemarks'].length; j++){
+
+                //used for sorting in order of time. Meaning order of time 0:00 -> endOfVideo is represented as 0 -> n
                 if(convertHMStoS(node[property][i]['timemarks'][j]['time']) > convertHMStoS(timemark['time'])){
                   node[property][i]['timemarks'].splice(j, 0, timemark);
                   inserted = true;
                   j = node[property][i]['timemarks'].length;
-                }else if(convertHMStoS(node[property][i]['timemarks'][j]['time']) == convertHMStoS(timemark['time'])){
+                }//check if a timemark needs to be overwritten (description was changed)
+                else if(convertHMStoS(node[property][i]['timemarks'][j]['time']) == convertHMStoS(timemark['time'])){
                   if(node[property][i]['timemarks'][j]['desc'] != timemark['desc']){
                     node[property][i]['timemarks'][j]['desc'] = timemark['desc'];
                     inserted = true;
@@ -325,8 +293,9 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
     if(node == null){
     	return false;
     }
+    //if the timemark was not inserted at all, add a new video to root and store the timemark
     if(node['name'] == "root" && ret == false){
-      console.log(" rebuilding the same time mark!");
+      console.log("  creating new video at root!");
     	var videoObj = {
       	"type" : "video",
         "name" : name,
@@ -340,5 +309,63 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
   }
 
   insertHelper(root);
+
+
+
+  // OLD VERSION ---- KEEP FOR TESTING PURPOSES
+  /*
+    var queue = new Queue();
+    queue.push(root);
+
+    var inserted = false;
+    while(queue.size() > 0 && !inserted){
+      var node = queue.pop();
+      for(var i = 0; i < node['children'].length; i++){
+        if(node['children'][i]['type'] == "video"){
+          if(node['children'][i]['id'] == mark['id']){
+            console.log(node['children'][i]['type']);
+            var elem = node['children'][i];
+            console.log(elem.length);
+            console.log(elem['name']);
+            for(var j = 0; j < node['children'][i]['timemarks'].length; j++){
+              if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) > convertHMStoS(mark['time'])){
+                node['children'][i]['timemarks'].splice(j, 0, mark);
+                inserted = true;
+                j = node['children'][i]['timemarks'].length;
+                i = node['children'].length;
+              }else if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) == convertHMStoS(mark['time'])){
+                if(node['children'][i]['timemarks'][j]['desc'] != mark['desc']){
+                  node['children'][i]['timemarks'][j]['desc'] = mark['desc'];
+                  inserted = true;
+                  j = node['children'][i]['timemarks'].length;
+                  i = node['children'].length;
+                }else{
+                  return true;
+                }
+              }
+            }
+            if(!inserted){
+              node['children'][i]['timemarks'].push(mark);
+            }
+
+            return true;
+          }
+        }else{
+          queue.push(node['children'][i]);
+        }
+      }
+    }
+
+    if(!inserted){
+      console.log(" building a new video!");
+      var videoObj = {
+        "type" : "video",
+        "name" : name,
+        "timemarks" : [mark],
+        "id" : mark['id']
+      };
+
+      node['children'].push(videoObj);
+    }*/
 
 }

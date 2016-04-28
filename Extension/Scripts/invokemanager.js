@@ -32,11 +32,16 @@ document.addEventListener('DOMContentLoaded', function () {
   //send the root of our file tree to the manager
   chrome.storage.sync.get('fstoreRoot', manager.populatePage);
 
+  //button used to create a new folder at root
   var newFolderButton = document.getElementById('newFolderROOT');
 
   newFolderButton.addEventListener('click', function(){
     var folderName = window.prompt("Please enter new folder name");
 
+    if(folderName == null){
+      return;
+    }
+    //store the requested folder
     var appStorage = new YTStorage();
     appStorage.createFolder(folderName, "root");
 
