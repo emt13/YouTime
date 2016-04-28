@@ -16,6 +16,123 @@ function convertHMStoS(str){
   return seconds;
 }
 
+YTFileTree.prototype.renameFolder = function(oldName, newName, root){
+
+  var queue = new Queue();
+
+  queue.push(root);
+
+  var found = false;
+  while(queue.size() > 0 && !found){
+    var node = queue.pop();
+    for(var i = 0; i < node['children'].length; i++){
+      if(node['children'][i]['type'] == "folder"){
+        if(node['children'][i]['name'] == oldName){
+          node['children'][i]['name'] = newName;
+          return;
+        }else{
+          queue.push(node['children'][i]);
+        }
+      }
+    }
+  }
+
+  /*
+  function renameFolderHelper(node){
+    //go through the node, check if the children are videos, if they are check them
+    for(property in node){
+      if(property == 'children'){
+        for(var i = 0; i < node[property].length; i++){
+          //if this is the video, we want to insert
+          if(node[property][i]['type'] == 'folder'){
+          	if(node[property][i]['name'] == oldName){
+          		node[property][i]['name'] = newName
+              return;
+          	}
+            renameFolderHelper(oldName, newName, node[property][i]);
+         	}
+        }
+      }
+    }
+  }
+  renameFolderHelper(root);*/
+}
+
+YTFileTree.prototype.removeFolderAtPoint = function(folderName, root){
+
+  var queue = new Queue();
+
+  queue.push(root);
+
+  var found = false;
+  while(queue.size() > 0 && !found){
+    var node = queue.pop();
+    for(var i = 0; i < node['children'].length; i++){
+      if(node['children'][i]['type'] == "folder"){
+        if(node['children'][i]['name'] == folderName){
+          node['children'].splice(i,1);
+          return;
+        }else{
+          queue.push(node['children'][i]);
+        }
+      }
+    }
+  }
+
+  /*function removeFolderHelper(node){
+    //go through the node, check if the children are videos, if they are check them
+    for(property in node){
+      if(property == 'children'){
+        for(var i = 0; i < node[property].length; i++){
+          if(node[property][i]['type'] == "folder" && node[property][i]['name'] == folderName){
+            node[property].splice(i,1);
+            return;
+         	}else if(node[property][i]['type'] == "folder" && node[property][i]['children'].length > 0){
+            console.debug(node[property][i]);
+          	removeFolderHelper(node[property][i]);
+         	}
+        }
+      }
+    }
+  }
+
+  removeFolderHelper(root);*/
+}
+
+YTFileTree.prototype.createFolderAtPoint = function(folderName, targetName, root){
+  function insertObjAtFolderHelper(obj, targetFolder, node){
+
+    //corner case of inserting at root
+  	if(node['name'] == "root" && node['name'] == targetFolder){
+      node['children'].push(obj);
+      return;
+    }
+
+  	//go through the node, check if the children are videos, if they are check them
+    for(property in node){
+      if(property == 'children'){
+        for(var i = 0; i < node[property].length; i++){
+          //if this is the video, we want to insert
+          if(node[property][i]['type'] == 'folder'){
+          	if(node[property][i]['name'] == targetFolder){
+              node[property][i]['children'].push(obj);
+              return;
+          	}
+            insertObjAtFolderHelper(obj, targetFolder, node[property][i]);
+         	}
+        }
+      }
+    }
+  }
+
+  var folderObj = {
+    "type" : "folder",
+    "name" : folderName,
+    "children" : []
+  };
+  insertObjAtFolderHelper(folderObj, targetName, root);
+}
+
 YTFileTree.prototype.removeVideo = function(targetID, root){
 
   function removeVideoHelper(node){
@@ -90,6 +207,9 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
 
   var name = timemark.getTitle();
 
+  console.log("insert timemark");
+  console.log(timemark);
+
   //console.log(" ROOT " + this.root['children'].length);
   //console.log(this.root);
   timemark = {
@@ -98,6 +218,7 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
     "URL" : timemark.getUrl(),
     "desc" : timemark.getDescription()
   };
+  console.log(timemark);
 
   function insertHelper(node){
     console.log("node: " + node['children'].length);

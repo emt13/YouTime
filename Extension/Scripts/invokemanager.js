@@ -34,6 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var newFolderButton = document.getElementById('newFolderROOT');
 
+  newFolderButton.addEventListener('click', function(){
+    var folderName = window.prompt("Please enter new folder name");
+
+    var appStorage = new YTStorage();
+    appStorage.createFolder(folderName, "root");
+
+    window.location.reload();
+  });
+
   var clearButton = document.getElementById('clearButton');
     // Povides the clear button with its functionality
     // to remove all Timemarks

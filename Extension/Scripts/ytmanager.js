@@ -85,12 +85,97 @@ function buildVideoElement(video, indent){
 
     li.appendChild(removeTime);
 
+
+    // edit button for editing the escription
+	  var editButton = document.createElement("BUTTON");
+	  editButton.appendChild(document.createTextNode("Edit"));
+	  // store information in button for use on click
+	  editButton.setAttribute("time", mark['time']);
+    editButton.setAttribute("title", video['name']);
+    editButton.setAttribute("id", mark['id']);
+    editButton.setAttribute("URL", mark['URL']);
+	  editButton.setAttribute("desc", mark['desc']);
+	  editButton.addEventListener("click", function() {
+  		// prompt user for new description
+  		var newDesc = window.prompt("Please Enter Your New Description");
+
+      var appStorage = new YTStorage();
+      var newTimemark = new YTTimemark(this.getAttribute("id"), this.getAttribute("title"), this.getAttribute("time"), this.getAttribute("URL"), newDesc);
+      appStorage.save(newTimemark);
+
+      window.location.reload();
+
+	  });
+
+	  li.appendChild(editButton);
+
+
     tmlist.appendChild(li);
   }
 
   vid.appendChild( tmlist )
 
   document.body.appendChild( vid );
+
+}
+
+function buildFolderElement(folderObj, offset){
+
+  console.log("building element for folder: " + folderObj['name']);
+  //create the element that holds all of the data
+  var folder = document.createElement("div");
+  folder.appendChild( document.createTextNode(offset + folderObj['name']));
+
+  //create the remove button for the video
+  var removeButton =  document.createElement("BUTTON");
+    removeButton.appendChild(document.createTextNode("Remove"));
+    removeButton.setAttribute("name", folderObj['name']);
+    removeButton.addEventListener("click", function() {
+      var appStorage = new YTStorage();
+      appStorage.removeFolder(this.getAttribute("name"));
+      window.location.reload();
+      console.log("removed");
+    });
+
+  folder.appendChild(removeButton);
+
+  // edit button for editing the escription
+  var editButton = document.createElement("BUTTON");
+  editButton.appendChild(document.createTextNode("Edit"));
+  // store information in button for use on click
+  editButton.setAttribute("name", folderObj['name']);
+  editButton.addEventListener("click", function() {
+    // prompt user for new description
+    var newName = window.prompt("Please enter your new folder name");
+
+    var appStorage = new YTStorage();
+    appStorage.renameFolder(this.getAttribute("name"), newName);
+
+    window.location.reload();
+
+  });
+
+  folder.appendChild(editButton);
+
+  // edit button for editing the escription
+  var newInnerFolderButton = document.createElement("BUTTON");
+  newInnerFolderButton.appendChild(document.createTextNode("New Folder"));
+  // store information in button for use on click
+  newInnerFolderButton.setAttribute("name", folderObj['name']);
+  newInnerFolderButton.addEventListener("click", function() {
+    // prompt user for new description
+    var newName = window.prompt("Please enter the name of your new folder");
+
+    var appStorage = new YTStorage();
+    appStorage.createFolder(newName, this.getAttribute("name"));
+
+    window.location.reload();
+
+  });
+
+  folder.appendChild(newInnerFolderButton);
+
+  document.body.appendChild(folder);
 
 }
 
@@ -104,7 +189,8 @@ function recurseFileSystem(node, indent){
       //display the video
       buildVideoElement(node['children'][i], indent);
     }else{
-      recurseFileSystem(node['children'][i], indent + "  ");
+      buildFolderElement(node['children'][i], indent);
+      recurseFileSystem(node['children'][i], indent + " - ");
     }
   }
 }
@@ -214,7 +300,7 @@ YTManager.prototype.populatePage = function(returnVal){
       });
 
       li.appendChild(removeTime);
-	  
+
 	  // edit button for editing the escription
 	  var editButton = document.createElement("BUTTON");
 	  editButton.appendChild(document.createTextNode("Edit"));
@@ -233,7 +319,7 @@ YTManager.prototype.populatePage = function(returnVal){
 		for(var i = 0; i < sortedKeys.length; i++) {
 		  if(sortedKeys[i] == this.getAttribute("id")) {
 		    var editTime = this.getAttribute("time");
-			  
+
 		    //find the correct timemark and then change its description
 			for(var j = 0; j < videos[sortedKeys[i]]['timemarks'].length; j++) {
 			  if(videos[sortedKeys[i]]['timemarks'][j]['time'] == editTime) {
@@ -245,7 +331,7 @@ YTManager.prototype.populatePage = function(returnVal){
 		  }
 		}
 	  });
-	  
+
 	  li.appendChild(editButton);
 
       tmlist.appendChild(li);
