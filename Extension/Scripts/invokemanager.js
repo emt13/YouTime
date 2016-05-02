@@ -41,6 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if(folderName == null){
       return;
     }
+
+    if(folderName == "root"){
+      window.alert("ERROR: Cannot use \"root\" as a file name!");
+      return;
+    }
+
     //store the requested folder
     var appStorage = new YTStorage();
     appStorage.createFolder(folderName, "root");

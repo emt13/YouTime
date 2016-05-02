@@ -149,39 +149,49 @@ YTStorage.prototype.renameFolder = function(oldName, newName){
 
 //creates a folder at a target
 YTStorage.prototype.createFolder = function(folderName, targetName){
+
   //get the root of the filesystem
   chrome.storage.sync.get('fstoreRoot', function(ret){
     //need to check if the root already exists, if not, create it
     if(ret['fstoreRoot'] == null){
+      //the root of the actual object to be used
       var rootObj = {};
       rootObj['fstoreRoot'] = {
         "type" : "folder",
         "name" : "root",
         "children" : []
       };
-      chrome.storage.sync.set(rootObj, function(){
-        //once the root has been created, insert the folder
-        var fileTree = new YTFileTree(ret['fstoreRoot']);
-        var root = ret['fstoreRoot'];
-        fileTree.createFolderAtPoint(folderName, targetName, root);
-        ret['fstoreRoot'] = root;
-        //store the updated root
-        chrome.storage.sync.set(ret, function(){
-          console.log("Removed Video from Root!");
-          console.log(ret['fstoreRoot']);
-        });
-      });
-    }else{
-      //go through the root and create the folder
-      var fileTree = new YTFileTree(ret['fstoreRoot']);
-      var root = ret['fstoreRoot'];
-      fileTree.createFolderAtPoint(folderName, targetName, root);
-      ret['fstoreRoot'] = root;
-      //store the updated root
-      chrome.storage.sync.set(ret, function(){
-        console.log("Removed Video from Root!");
-        console.log(ret['fstoreRoot']);
-      });
+      ret = rootObj;
     }
+
+    //once the root has been created, insert the folder
+    var fileTree = new YTFileTree(ret['fstoreRoot']);
+    var root = ret['fstoreRoot'];
+    fileTree.createFolderAtPoint(folderName, targetName, root);
+    ret['fstoreRoot'] = root;
+    //store the updated root
+    chrome.storage.sync.set(ret, function(){
+      console.log("Removed Video from Root!");
+      console.log(ret['fstoreRoot']);
+    });
+
+  });
+}
+
+YTStorage.prototype.moveElement = function(sourceName, destinationName){
+  //get the root of the filesystem then proceed to remove the video
+  chrome.storage.sync.get('fstoreRoot', function(ret){
+    if(ret['fstoreRoot'] == null){
+      console.log("ERROR: fstoreRoot could not be found!" );
+      return;
+    }
+
+    var fileTree = new YTFileTree(ret['fstoreRoot']);
+    var root = ret['fstoreRoot'];
+    fileTree.moveObjectToFolder(sourceName, destinationName, root);
+    ret['fstoreRoot'] = root;
+    //store the updated root
+    chrome.storage.sync.set(ret, function(){
+    });
   });
 }

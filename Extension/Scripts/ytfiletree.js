@@ -48,26 +48,6 @@ YTFileTree.prototype.renameFolder = function(oldName, newName, root){
       }
     }
   }
-  // OLD VERSION ---- KEEP FOR TESTING PURPOSES
-  /*
-  function renameFolderHelper(node){
-    //go through the node, check if the children are videos, if they are check them
-    for(property in node){
-      if(property == 'children'){
-        for(var i = 0; i < node[property].length; i++){
-          //if this is the video, we want to insert
-          if(node[property][i]['type'] == 'folder'){
-          	if(node[property][i]['name'] == oldName){
-          		node[property][i]['name'] = newName
-              return;
-          	}
-            renameFolderHelper(oldName, newName, node[property][i]);
-         	}
-        }
-      }
-    }
-  }
-  renameFolderHelper(root);*/
 }
 
 //removes a folder
@@ -80,7 +60,9 @@ YTFileTree.prototype.removeFolder = function(folderName, root){
 
   var found = false;
   while(queue.size() > 0 && !found){
+
     var node = queue.pop();
+
     for(var i = 0; i < node['children'].length; i++){
       if(node['children'][i]['type'] == "folder"){
         if(node['children'][i]['name'] == folderName){
@@ -93,127 +75,110 @@ YTFileTree.prototype.removeFolder = function(folderName, root){
       }
     }
   }
-  // OLD VERSION ---- KEEP FOR TESTING PURPOSES
-  /*function removeFolderHelper(node){
-    //go through the node, check if the children are videos, if they are check them
-    for(property in node){
-      if(property == 'children'){
-        for(var i = 0; i < node[property].length; i++){
-          if(node[property][i]['type'] == "folder" && node[property][i]['name'] == folderName){
-            node[property].splice(i,1);
-            return;
-         	}else if(node[property][i]['type'] == "folder" && node[property][i]['children'].length > 0){
-            console.debug(node[property][i]);
-          	removeFolderHelper(node[property][i]);
-         	}
-        }
-      }
-    }
-  }
 
-  removeFolderHelper(root);*/
 }
 
 //creates a fodler at a given target point
 YTFileTree.prototype.createFolderAtPoint = function(folderName, targetName, root){
-  //recursive target function
-  function insertObjAtFolderHelper(obj, targetFolder, node){
 
-    //corner case of inserting at root
-  	if(node['name'] == "root" && node['name'] == targetFolder){
-      node['children'].push(obj);
-      return;
-    }
+  console.log("IN createFolderAtPoint!!!!!!");
 
-  	//go through the node, check if the children are videos, if they are check them
-    for(property in node){
-      if(property == 'children'){
-        for(var i = 0; i < node[property].length; i++){
-          //if this is the video, we want to insert
-          if(node[property][i]['type'] == 'folder'){
-          	if(node[property][i]['name'] == targetFolder){
-              node[property][i]['children'].push(obj);
-              return;
-          	}
-            insertObjAtFolderHelper(obj, targetFolder, node[property][i]);
-         	}
-        }
-      }
-    }
-  }
-  //object used to represent folder
   var folderObj = {
     "type" : "folder",
     "name" : folderName,
     "children" : []
   };
-  insertObjAtFolderHelper(folderObj, targetName, root);
+
+  //every object inside the queue should have type 'folder'
+  var queue = new Queue();
+
+  queue.push(root);
+
+  while(queue.size() != 0){
+
+    var currentNode = queue.pop();
+
+    console.log(" looking for: " + targetName + "   in node: " + currentNode['name']);
+    //check this node
+    if(currentNode['name'] == targetName){
+      currentNode['children'].push(folderObj);
+      return;
+    }
+    //find all of the subfolders and add them to the queue
+    for(var i = 0; i < currentNode['children'].length; i++){
+      if(currentNode['children'][i]['type'] == "folder"){
+        queue.push(currentNode['children'][i]);
+      }
+    }
+  }
+
 }
 
 //removes a video by id from the filesystem
 YTFileTree.prototype.removeVideo = function(targetID, root){
 
-  //function to navigate the structure of the filesystem
-  function removeVideoHelper(node){
-    //go through the node, check if the children are videos, if they are check them
-    for(property in node){
-      if(property == 'children'){
-        for(var i = 0; i < node[property].length; i++){
-          if(node[property][i]['type'] == 'video'){
-          	if(node[property][i]['id'] == targetID){
-              //removes the video from its parent folder
-          		node[property].splice(i, 1);
-              return;
-          	}
-         	}else{
-          	//removeVideoHelper(node[property][i]);
-         	}
+  var queue = new Queue();
+
+  queue.push(root);
+
+  while(queue.size() != 0){
+
+    var currentNode = queue.pop();
+
+    for(var i = 0; i < currentNode['children'].length; i++){
+      //if this is a video, check the name and if it should be removed
+      if(currentNode['children'][i]['type'] == "video"){
+        if(currentNode['children'][i]['id'] == targetID){
+          currentNode['children'].splice(i, 1);
         }
+      }else{
+        queue.push(currentNode['children'][i]);
       }
     }
   }
 
-  removeVideoHelper(root);
 }
-
-
 
 //remvoes a timemark from a video. If that video then has 0 timemarks, remove the video
 YTFileTree.prototype.removeTimemark = function(timemark, root){
 
-  //function to navigate the structure of the filesystem
-  function removeTMHelper(node){
-    //go through the node, check if the children are videos, if they are check them
-    for(property in node){
-      if(property == 'children'){
-        var size = node[property].length;
-        for(var i = 0; i < size; i++){
-          //if this is the video, we want to insert
-          if(node[property][i]['type'] == 'video'){
-            console.log("video: " + node[property][i]['id'] + " - " + node[property][i]['timemarks'].length);
-            if(node[property][i]['id'] == timemark['id']){
-            	for(var j = 0; j < node[property][i]['timemarks'].length; j++){
-             		//delete the relevant timemark
-              	if(node[property][i]['timemarks'][j]['time'] == timemark['time']){
-                	node[property][i]['timemarks'].splice(j, 1);
-                  break;
-                }
+  console.log("IN removeTimemark!!!!");
+
+  var queue = new Queue();
+
+  queue.push(root);
+
+  while(queue.size() != 0){
+
+    var currentNode = queue.pop();
+
+    console.log(" checking in: " + currentNode['name']);
+    console.log(currentNode);
+
+    for(var i = 0; i < currentNode['children'].length; i++){
+      if(currentNode['children'][i]['type'] == "video"){
+        if(currentNode['children'][i]['id'] == timemark['id']){
+          var tm = currentNode['children'][i]['timemarks'];
+          for(var j = 0; j < tm.length; j++){
+            if(tm[j]['time'] == timemark['time']){
+              tm.splice(j, 1);
+
+              //if the video has no timemarks, remove it
+              if(tm.length == 0){
+                currentNode['children'].splice(i, 1);
               }
-              //deletes the video if there are no timemarks in it
-              if(node[property][i]['timemarks'].length == 0){
-              	node[property].splice(i, 1);
-              }
-              return true;
+
+              return;
             }
-          }else{ //only option here is it is a folder
-            //removeTMHelper(timemark, node[property][i]);
           }
+          return;
         }
+      }else{
+        queue.push(currentNode['children'][i]);
       }
     }
-  }
 
-  removeTMHelper(root);
+  }
 
 }
 
@@ -226,146 +191,110 @@ YTFileTree.prototype.insertTimemark = function(timemark, root){
 
   var name = timemark.getTitle();
 
-  console.log("insert timemark");
-  console.log(timemark);
-
-  //console.log(" ROOT " + this.root['children'].length);
-  //console.log(this.root);
   timemark = {
     "id" : timemark.getId(),
     "time" : timemark.getTime(),
     "URL" : timemark.getUrl(),
     "desc" : timemark.getDescription()
   };
-  //console.log(timemark);
 
-  function insertHelper(node){
+  var queue = new Queue();
 
-    console.log("NOW CHECKING IN NODE: "+ node['name'])
-    var ret = false;
-    //go through the node, check if the children are videos, if they are check them
-    for(property in node){
-      if(property == 'children'){
-        console.log("--");
-        var size = node[property].length;
-        console.log(node[property].length + " = " + size);
-        for(var i = 0; i < size; i++){
-          console.log(" ** ");
-          console.log(node[property][i]);
-          //if this is the video, we want to insert
-          if(node[property][i]['type'] == "video"){
-            if(node[property][i]['id'] == timemark['id']){
-              var inserted = false;
-              //go through all of the timemarks in the video
-              for(var j = 0; j < node[property][i]['timemarks'].length; j++){
+  queue.push(root);
 
-                //used for sorting in order of time. Meaning order of time 0:00 -> endOfVideo is represented as 0 -> n
-                if(convertHMStoS(node[property][i]['timemarks'][j]['time']) > convertHMStoS(timemark['time'])){
-                  node[property][i]['timemarks'].splice(j, 0, timemark);
-                  inserted = true;
-                  j = node[property][i]['timemarks'].length;
-                }//check if a timemark needs to be overwritten (description was changed)
-                else if(convertHMStoS(node[property][i]['timemarks'][j]['time']) == convertHMStoS(timemark['time'])){
-                  if(node[property][i]['timemarks'][j]['desc'] != timemark['desc']){
-                    node[property][i]['timemarks'][j]['desc'] = timemark['desc'];
-                    inserted = true;
-                    j = node[property][i]['timemarks'].length;
-                  }else{
-                    return true;
-                  }
-                }
-              }
-              if(!inserted){
-            	  node[property][i]['timemarks'].push(timemark);
-              }
+  while(queue.size() != 0){
 
-              return true;
+    var currentNode = queue.pop();
+
+    for(var i = 0; i < currentNode['children'].length; i++){
+
+      if(currentNode['children'][i]['type'] == "video"){
+        if(currentNode['children'][i]['id'] == timemark['id']){
+
+          var tm = currentNode['children'][i]['timemarks'];
+          for(var j = 0; j < tm.length; j++){
+            var currentTime = convertHMStoS(tm[j]['time']);
+            var newTime = convertHMStoS(timemark['time']);
+
+            //update with the new description
+            if(currentTime == newTime){
+              tm[j]['desc'] = timemark['desc'];
+              return;
+            }else if(currentTime > newTime){
+              tm.splice(j, 0, timemark);
+              return;
             }
-            //return true;
-          }else{ //only option here is it is a folder
-            //ret |= insertHelper(timemark, name, node[property][i]);
           }
+          currentNode['children'][i]['timemarks'].push(timemark);
+          return;
         }
+      }else{
+        queue.push(currentNode['children'][i]);
       }
-    }
-
-    //Post insertion checks, insert at root
-    if(node == null){
-    	return false;
-    }
-    //if the timemark was not inserted at all, add a new video to root and store the timemark
-    if(node['name'] == "root" && ret == false){
-      console.log("  creating new video at root!");
-    	var videoObj = {
-      	"type" : "video",
-        "name" : name,
-        "timemarks" : [],
-        "id" : timemark['id']
-      };
-      videoObj['timemarks'].push(timemark);
-
-      node['children'].push(videoObj);
     }
   }
 
-  insertHelper(root);
+  //if it reaches this point, that means that the video has not already been inserted
+  var videoObj = {
+    "type" : "video",
+    "name" : name,
+    "timemarks" : [timemark],
+    "id" : timemark['id']
+  };
 
+  root['children'].push(videoObj);
 
+}
 
-  // OLD VERSION ---- KEEP FOR TESTING PURPOSES
-  /*
-    var queue = new Queue();
-    queue.push(root);
+YTFileTree.prototype.moveObjectToFolder = function(nameToMove, targetName, root){
 
-    var inserted = false;
-    while(queue.size() > 0 && !inserted){
-      var node = queue.pop();
-      for(var i = 0; i < node['children'].length; i++){
-        if(node['children'][i]['type'] == "video"){
-          if(node['children'][i]['id'] == mark['id']){
-            console.log(node['children'][i]['type']);
-            var elem = node['children'][i];
-            console.log(elem.length);
-            console.log(elem['name']);
-            for(var j = 0; j < node['children'][i]['timemarks'].length; j++){
-              if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) > convertHMStoS(mark['time'])){
-                node['children'][i]['timemarks'].splice(j, 0, mark);
-                inserted = true;
-                j = node['children'][i]['timemarks'].length;
-                i = node['children'].length;
-              }else if(convertHMStoS(node['children'][i]['timemarks'][j]['time']) == convertHMStoS(mark['time'])){
-                if(node['children'][i]['timemarks'][j]['desc'] != mark['desc']){
-                  node['children'][i]['timemarks'][j]['desc'] = mark['desc'];
-                  inserted = true;
-                  j = node['children'][i]['timemarks'].length;
-                  i = node['children'].length;
-                }else{
-                  return true;
-                }
-              }
-            }
-            if(!inserted){
-              node['children'][i]['timemarks'].push(mark);
-            }
+  //used to store the objects in question during the first pass of the filesystem
+  var objToMove, destination, parentOfMove;
 
-            return true;
-          }
-        }else{
-          queue.push(node['children'][i]);
-        }
-      }
+  var queue = new Queue();
+
+  queue.push(root);
+
+  //get the objects in question
+  while(queue.size() != 0 && (objToMove == null || destination == null)){
+
+    var currentNode = queue.pop();
+
+    console.log("checking in: " + currentNode['name']);
+
+    //enforces that destination is a "folder" type
+    if(currentNode['name'] == targetName){
+      destination = currentNode;
     }
 
-    if(!inserted){
-      console.log(" building a new video!");
-      var videoObj = {
-        "type" : "video",
-        "name" : name,
-        "timemarks" : [mark],
-        "id" : mark['id']
-      };
+    for(var i = currentNode['children'].length - 1; i >= 0; i--){
+      var cElem = currentNode['children'][i];
+      console.log("child: " + cElem['name']);
+      console.log(cElem);
+      if(cElem['name'] == nameToMove){
+        parentOfMove = currentNode;
+      }
+      //if a folder, it needs to be checked
+      if(cElem['type'] == "folder"){
+        queue.push(cElem);
+      }
+    }
+  }
 
-      node['children'].push(videoObj);
-    }*/
+  if(destination != null && parentOfMove != null){
+    for(var i = 0; i < parentOfMove['children'].length; i++){
+      if(parentOfMove['children'][i]['name'] == nameToMove){
+        destination['children'].push(parentOfMove['children'][i]);
+        parentOfMove['children'].splice(i, 1);
+      }
+    }
+  }
+
+  /*//appends the objectToMove to the destination
+  if(parentOfMove != null && destination != null){
+    destination['children'].push(objToMove);
+  }*/
+
+
 
 }
