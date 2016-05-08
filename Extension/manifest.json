@@ -39,7 +39,9 @@
       "run_at": "document_start"
   }],
 
-  "web_accessible_resources": ["Scripts/content.js"]
+  "web_accessible_resources": ["Scripts/content.js"],
+
+  "content_security_policy": "script-src 'self' https://code.jquery.com/ https://maxcdn.bootstrapcdn.com; object-src 'self'"
 
 
 }

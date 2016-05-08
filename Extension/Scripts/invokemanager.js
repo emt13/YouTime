@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // to remove all Timemarks
 	clearButton.addEventListener('click', function() {
     chrome.storage.sync.clear();
+    var newFolder = document.getElementById("newFolderROOT");
+    newFolder.setAttribute("class", newFolder.getAttribute("class").replace(" disabled", ""));
     window.location.reload();
     console.log("timemarks cleared");
   });

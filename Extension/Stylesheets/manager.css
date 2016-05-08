@@ -7,6 +7,11 @@
  * @since 2016-04-01
  */
 
+ /* Bootstrap Class styles */
+.panel-heading {
+  font-size: medium;
+}
+
 /* Main HTML body style */
 body {
     font-family: Segoe UI, Arial, sans-serif;
@@ -15,7 +20,7 @@ body {
 }
 
 html {
-    background: url(/Images/background_5_246x220.png) no-repeat bottom right fixed; 
+    background: url(/Images/background_5_246x220.png) no-repeat bottom right fixed;
     background-size: 25%;
 }
 
@@ -109,6 +114,10 @@ button {
 
 button:hover {
     box-shadow: 2px 4px 2px 0 rgba(0,0,0,0.2);
+}
+
+a {
+
 }
 
 .divider {

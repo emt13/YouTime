@@ -15,18 +15,88 @@ function YTManager(doc) {
   this.document = doc;
 }
 
-//builds div for a video
-function buildVideoElement(video, indent){
-  //create the element that holds all of the data
-  var vid = document.createElement("div");
+//creates the buttons for a timemark
+function makeButtonsForTimemark(mark, title){
+  //create button group
+  var btnGroup = document.createElement("div");
+  btnGroup.setAttribute("class", "btn-group pull-right");
 
-  //console.log(vid.style);
-  vid.appendChild( document.createTextNode(indent + video['name']));
+  //create share, add it
+  var share = document.createElement("button");
+  share.setAttribute("type", "button");
+  share.setAttribute("class", "btn btn-danger btn-xs");
+  share.appendChild(document.createTextNode("Share"));
+  share.setAttribute("url", mark['URL']);
+  share.addEventListener("click", function() {
+    window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
+  }, false);
 
-  var moveButton = document.createElement("BUTTON");
-  moveButton.appendChild(document.createTextNode("Move"));
-  moveButton.setAttribute("name", video['name']);
-  moveButton.addEventListener("click", function(){
+  btnGroup.appendChild(share);
+
+  //create edit, add it
+  var edit = document.createElement("button");
+  edit.setAttribute("type", "button");
+  edit.setAttribute("class", "btn btn-danger btn-xs");
+  edit.appendChild(document.createTextNode("Edit"));
+  edit.setAttribute("time", mark['time']);
+  edit.setAttribute("title", title);
+  edit.setAttribute("id", mark['id']);
+  edit.setAttribute("URL", mark['URL']);
+  edit.setAttribute("desc", mark['desc']);
+  edit.addEventListener("click", function() {
+    // prompt user for new description
+    var newDesc = window.prompt("Please Enter Your New Description");
+
+    if(newDesc == null){
+      return;
+    }
+
+    //overwrite the timemark with the old description
+    var appStorage = new YTStorage();
+    var newTimemark = new YTTimemark(this.getAttribute("id"), this.getAttribute("title"), this.getAttribute("time"), this.getAttribute("URL"), newDesc);
+    appStorage.save(newTimemark);
+
+    window.location.reload();
+
+  });
+
+  btnGroup.appendChild(edit);
+
+  //create remove, add it
+  var remove = document.createElement("button");
+  remove.setAttribute("type", "button");
+  remove.setAttribute("class", "btn btn-danger btn-xs");
+  remove.appendChild(document.createTextNode("Remove"));
+  remove.setAttribute("time", mark['time']);
+  remove.setAttribute("id", mark['id']);
+  remove.addEventListener("click", function() {
+    //gets relevant information and sends it to the YTStorage to delete the timemark
+    var appStorage = new YTStorage();
+    appStorage.removeTimemark({
+      "id": this.getAttribute("id"),
+      "time": this.getAttribute("time")
+    });
+    window.location.reload();
+  });
+
+  btnGroup.appendChild(remove);
+
+  //return button group
+  return btnGroup;
+}
+//creates the buttons for a video
+function makeButtonsForVideo(video){
+  //create button group
+  var btnGroup = document.createElement("div");
+  btnGroup.setAttribute("class", "btn-group pull-right");
+
+  //create move, add it
+  var move = document.createElement("button");
+  move.setAttribute("type", "button");
+  move.setAttribute("class", "btn btn-danger btn-xs");
+  move.appendChild(document.createTextNode("Move"));
+  move.setAttribute("name", video['name']);
+  move.addEventListener("click", function(){
     var dest = window.prompt("Where do you want to move this folder?");
 
     if(dest == null){
@@ -35,156 +105,46 @@ function buildVideoElement(video, indent){
 
     var source = this.getAttribute("name");
 
+    console.log("moving source: " + source + " to destination: " + dest);
+
     var appStorage = new YTStorage();
     appStorage.moveElement(source, dest);
-
     window.location.reload();
   });
 
-  vid.appendChild(moveButton);
+  btnGroup.appendChild(move);
 
-  //create the remove button for the video
-  var removeButton =  document.createElement("BUTTON");
-    removeButton.appendChild(document.createTextNode("Remove"));
-    removeButton.setAttribute("video", video['name']);
-    removeButton.setAttribute("id", video['id']);
-    removeButton.addEventListener("click", function() {
-      var appStorage = new YTStorage();
-      appStorage.removeVideo(this.getAttribute("id"));
-      window.location.reload();
-      console.log("removed");
-    });
-
-  vid.appendChild(removeButton);
-
-  // create list element for timelink display
-  var tmlist = document.createElement("ul");
-
-  // get the timemarks for each video
-  var marks = video['timemarks'];
-
-  for(var j = 0; j < marks.length; j++) {
-    var mark = marks[j];
-    var li = document.createElement("li");
-    var a = document.createElement("a");
-
-    //sets the href to the youtube link
-    a.setAttribute("href", mark['URL']);
-    var hyperlink = mark['time'] + " - ";
-    if(mark['desc'] != null){
-      hyperlink = hyperlink + mark['desc'];
-    }else{
-      hyperlink = hyperlink + " < No Description >";
-    }
-    a.appendChild(document.createTextNode(hyperlink));
-    li.appendChild(a);
-
-    //creates the share button. Adds a listener that allows you to copy the link
-    var shareButton = document.createElement("BUTTON");
-    shareButton.appendChild(document.createTextNode("Share"));
-    shareButton.setAttribute("url", mark['URL']);
-    shareButton.addEventListener("click", function() {
-      window.prompt("Ctrl + C to copy this link:", this.getAttribute("url"));
-    }, false);
-
-    li.appendChild(shareButton);
-
-    // edit button for editing the escription
-    var editButton = document.createElement("BUTTON");
-    editButton.appendChild(document.createTextNode("Edit"));
-    // store information in button for use on click
-    editButton.setAttribute("time", mark['time']);
-    editButton.setAttribute("title", video['name']);
-    editButton.setAttribute("id", mark['id']);
-    editButton.setAttribute("URL", mark['URL']);
-    editButton.setAttribute("desc", mark['desc']);
-    editButton.addEventListener("click", function() {
-      // prompt user for new description
-      var newDesc = window.prompt("Please Enter Your New Description");
-
-      if(newDesc == null){
-        return;
-      }
-
-      //overwrite the timemark with the old description
-      var appStorage = new YTStorage();
-      var newTimemark = new YTTimemark(this.getAttribute("id"), this.getAttribute("title"), this.getAttribute("time"), this.getAttribute("URL"), newDesc);
-      appStorage.save(newTimemark);
-
-      window.location.reload();
-
-    });
-
-    li.appendChild(editButton);
-
-    // Add remove button to the timemarks
-    var removeTime = document.createElement("BUTTON");
-    removeTime.appendChild(document.createTextNode("Remove"));
-    //store information in the remove button (holds information to be used in the click callback)
-    removeTime.setAttribute("time", mark['time']);
-    removeTime.setAttribute("id", mark['id']);
-    removeTime.addEventListener("click", function() {
-      //gets relevant information and sends it to the YTStorage to delete the timemark
-      var appStorage = new YTStorage();
-      appStorage.removeTimemark({
-        "id": this.getAttribute("id"),
-        "time": this.getAttribute("time")
-      });
-      window.location.reload();
-    });
-
-    li.appendChild(removeTime);
-
-    tmlist.appendChild(li);
-  }
-
-  vid.appendChild(tmlist);
-
-  document.body.appendChild(vid);
-
-}
-
-//builds a div for a folder
-function buildFolderElement(folderObj, offset){
-
-  //create the element that holds all of the data
-  var folder = document.createElement("div");
-
-  folder.appendChild( document.createTextNode(offset + folderObj['name']));
-
-  // edit button for editing the escription
-  var editButton = document.createElement("BUTTON");
-  editButton.appendChild(document.createTextNode("Edit"));
-  // store information in button for use on click
-  editButton.setAttribute("name", folderObj['name']);
-  editButton.addEventListener("click", function() {
-    // prompt user for new description
-    var newName = window.prompt("Please enter your new folder name");
-
-    if(newName == null){
-      return;
-    }
-
-    if(newName == "root"){
-      window.alert("ERROR: Cannot use \"root\" as a file name!");
-      return;
-    }
-
+  //create remove, add it
+  var remove = document.createElement("button");
+  remove.setAttribute("type", "button");
+  remove.setAttribute("class", "btn btn-danger btn-xs");
+  remove.appendChild(document.createTextNode("Remove"));
+  remove.setAttribute("name", video['name']);
+  remove.addEventListener("click", function() {
     var appStorage = new YTStorage();
-    appStorage.renameFolder(this.getAttribute("name"), newName);
-
+    appStorage.removeFolder(this.getAttribute("name"));
     window.location.reload();
-
+    console.log("removed");
   });
 
-  folder.appendChild(editButton);
+  btnGroup.appendChild(remove);
 
-  // button that allows for a folder to be created inside this folder
-  var newInnerFolderButton = document.createElement("BUTTON");
-  newInnerFolderButton.appendChild(document.createTextNode("New Folder"));
-  // store information in button for use on click
-  newInnerFolderButton.setAttribute("name", folderObj['name']);
-  newInnerFolderButton.addEventListener("click", function() {
+  //return button group
+  return btnGroup;
+}
+//creates the buttons for a folder
+function makeButtonsForFolder(folder){
+  //create button group
+  var btnGroup = document.createElement("div");
+  btnGroup.setAttribute("class", "btn-group pull-right");
+
+  //create new folder, add it
+  var newFolder = document.createElement("button");
+  newFolder.setAttribute("type", "button");
+  newFolder.setAttribute("class", "btn btn-danger btn-xs");
+  newFolder.appendChild(document.createTextNode("New Folder"));
+  newFolder.setAttribute("name", folder['name']);
+  newFolder.addEventListener("click", function() {
     // prompt user for new description
     var newName = window.prompt("Please enter the name of your new folder");
 
@@ -204,12 +164,15 @@ function buildFolderElement(folderObj, offset){
 
   });
 
-  folder.appendChild(newInnerFolderButton);
+  btnGroup.appendChild(newFolder);
 
-  var moveButton = document.createElement("BUTTON");
-  moveButton.appendChild(document.createTextNode("Move"));
-  moveButton.setAttribute("name", folderObj['name']);
-  moveButton.addEventListener("click", function(){
+  //create move, add it
+  var move = document.createElement("button");
+  move.setAttribute("type", "button");
+  move.setAttribute("class", "btn btn-danger btn-xs");
+  move.appendChild(document.createTextNode("Move"));
+  move.setAttribute("name", folder['name']);
+  move.addEventListener("click", function(){
     var dest = window.prompt("Where do you want to move this folder?");
 
     if(dest == null){
@@ -225,41 +188,136 @@ function buildFolderElement(folderObj, offset){
     window.location.reload();
 
   });
+  if("root" != folder['name']){
+    btnGroup.appendChild(move);
+  }
 
-  folder.appendChild(moveButton);
+  //create edit, add it
+  var edit = document.createElement("button");
+  edit.setAttribute("type", "button");
+  edit.setAttribute("class", "btn btn-danger btn-xs");
+  edit.appendChild(document.createTextNode("Edit"));
+  edit.setAttribute("name", folder['name']);
+  edit.addEventListener("click", function() {
+    // prompt user for new description
+    var newName = window.prompt("Please enter your new folder name");
 
-  //create the remove button for the video
-  var removeButton =  document.createElement("BUTTON");
-    removeButton.appendChild(document.createTextNode("Remove"));
-    removeButton.setAttribute("name", folderObj['name']);
-    removeButton.addEventListener("click", function() {
-      var appStorage = new YTStorage();
-      appStorage.removeFolder(this.getAttribute("name"));
-      window.location.reload();
-      console.log("removed");
-    });
+    if(newName == null){
+      return;
+    }
 
-  folder.appendChild(removeButton);
+    if(newName == "root"){
+      window.alert("ERROR: Cannot use \"root\" as a file name!");
+      return;
+    }
 
+    var appStorage = new YTStorage();
+    appStorage.renameFolder(this.getAttribute("name"), newName);
 
-  document.body.appendChild(folder);
+    window.location.reload();
 
+  });
+  if("root" != folder['name']){
+    btnGroup.appendChild(edit);
+  }
+
+  //create remove, add it
+  var remove = document.createElement("button");
+  remove.setAttribute("type", "button");
+  remove.setAttribute("class", "btn btn-danger btn-xs");
+  remove.appendChild(document.createTextNode("Remove"));
+  remove.setAttribute("name", folder['name']);
+  remove.addEventListener("click", function() {
+    var appStorage = new YTStorage();
+    appStorage.removeFolder(this.getAttribute("name"));
+    window.location.reload();
+    console.log("removed");
+  });
+  if("root" != folder['name']){
+    btnGroup.appendChild(remove);
+  }
+
+  //return button group
+  return btnGroup;
+}
+//makes sure that a string has no blank spaces since it is being used as an id
+function sanitizeString(input){
+  return input.replace(" ", "-");
 }
 
-function recurseFileSystemHTML(node, folderIndent, videoIndent){
-  if(node == null){
-    return;
-  }
-  //build all of the elements spanning from node recursively
-  for(var i = 0; i < node['children'].length; i++){
-    if(node['children'][i]['type'] == "video"){
-      //display the video
-      buildVideoElement(node['children'][i], videoIndent);
+//recursive function to build the
+function buildDivTree(node){
+
+  console.log("building: " + node['name']);
+
+  var masterDiv = document.createElement("div");
+  masterDiv.setAttribute("class", "panel panel-danger");
+
+  var panelHeading = document.createElement("div");
+  panelHeading.setAttribute("class", "panel-heading");
+
+  var header = document.createElement("a");
+  header.setAttribute("data-toggle", "collapse");
+  header.setAttribute("data-parent", "#accordion");
+  header.setAttribute("href", "#" + sanitizeString(node['name']) + "ToCollapse");
+  header.appendChild(document.createTextNode(node['name']));
+
+  var bodyList = document.createElement("ul");
+  bodyList.setAttribute("id", sanitizeString(node['name']) + "ToCollapse");
+
+  panelHeading.appendChild(header);
+  masterDiv.appendChild(panelHeading);
+
+  //if this node is a video, we need to create hyperlinks and add those to the div
+  if(node['type'] == "video"){
+
+    header.appendChild(makeButtonsForVideo(node));
+
+    bodyList.setAttribute("class", "list-group panel-collapse collapse in");
+    //add appropriate ids
+    for(var i = 0; i < node['timemarks'].length; i++){
+      //create the list item element
+      var tmpLI = document.createElement("li");
+      tmpLI.setAttribute("class", "list-group-item");
+      var mark = node['timemarks'][i];
+      console.log(mark);
+      var a = document.createElement("a");
+
+      //sets the href to the youtube link
+      a.setAttribute("href", mark['URL']);
+      var hyperlink = mark['time'] + " - ";
+      if(mark['desc'] != null){
+        hyperlink = hyperlink + mark['desc'];
+      }else{
+        hyperlink = hyperlink + " < No Description >";
+      }
+      var buttonDiv = makeButtonsForTimemark(mark, node['name']);
+      a.appendChild(document.createTextNode(hyperlink));
+      a.appendChild(buttonDiv);
+      tmpLI.appendChild(a);
+      bodyList.appendChild(tmpLI);
+    }
+  }else{ //if this node is a folder, we need to get all of the sub elements and append those to this one
+    //The root should already be extended to convey that there is information in the root
+    if(node['name'] == "root"){
+      bodyList.setAttribute("class", "list-group panel-collapse collapse in");
     }else{
-      buildFolderElement(node['children'][i], folderIndent);
-      recurseFileSystemHTML(node['children'][i], folderIndent + " - ", videoIndent + " ++ ");
+      bodyList.setAttribute("class", "list-group panel-collapse collapse");
+    }
+    header.appendChild(makeButtonsForFolder(node));
+
+    //recurse on the children and append their divs
+    for(var i = 0; i < node['children'].length; i++){
+      var tmpLI = document.createElement("li");
+      tmpLI.setAttribute("class","list-group-item");
+      tmpLI.appendChild(buildDivTree(node['children'][i]));
+      bodyList.appendChild(tmpLI);
     }
   }
+
+  masterDiv.appendChild(bodyList);
+
+  return masterDiv;
 }
 
 // Populate Page function that grabs video objects from storage and
@@ -271,7 +329,16 @@ YTManager.prototype.populatePage = function(rootObj){
   console.log("root");
   console.log(root);
 
-  //build an html page around the filesystem
-  recurseFileSystemHTML(root, "", "");
+  if(root == null){
+    console.log("Root is null!");
+    return;
+  }else{
+    var newFolder = document.getElementById("newFolderROOT");
+    newFolder.setAttribute("class", newFolder.getAttribute("class") + " disabled");
+  }
+
+  //build div tree to display the file system
+  var divTree = buildDivTree(root);
+  document.body.appendChild(divTree);
 
 }

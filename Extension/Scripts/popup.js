@@ -239,6 +239,11 @@ document.addEventListener('DOMContentLoaded', function () {
   doneButton.addEventListener('click', function(){
     //sets the new description and saves over the previous entry in the filesystem
     desc = document.getElementById("descriptionField").value;
+
+    if(tm == null){
+      window.close();
+    }
+
     tm.setDescription(desc);
     appStorage.save(tm);
 
