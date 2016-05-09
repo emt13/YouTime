@@ -119,10 +119,11 @@ function makeButtonsForVideo(video){
   remove.setAttribute("type", "button");
   remove.setAttribute("class", "btn btn-danger btn-xs");
   remove.appendChild(document.createTextNode("Remove"));
-  remove.setAttribute("name", video['name']);
+  remove.setAttribute("name", video['id']);
   remove.addEventListener("click", function() {
     var appStorage = new YTStorage();
-    appStorage.removeFolder(this.getAttribute("name"));
+    console.log(this.getAttribute("name"));
+    appStorage.removeVideo(this.getAttribute("name"));
     window.location.reload();
     console.log("removed");
   });
@@ -241,8 +242,33 @@ function makeButtonsForFolder(folder){
   return btnGroup;
 }
 //makes sure that a string has no blank spaces since it is being used as an id
-function sanitizeString(input){
-  return input.replace(" ", "-");
+/*function sanitizeString(input){
+  input = input.replace(" ", "-");
+  input = input.replace("\'", "-");
+  input = input.replace(":", "-");
+  input = input.replace("\"", "-");
+  input = input.replace("\\", "-");
+  input = input.replace("/", "-");
+  input = input.replace(",", "-");
+  input = input.replace(".", "-");
+  input = input.replace("!", "-");
+  input = input.replace("@", "-");
+  input = input.replace("#", "-");
+  input = input.replace("$", "-");
+  input = input.replace("%", "-");
+  input = input.replace("^", "-");
+  input = input.replace("&", "-");
+  input = input.replace("*", "-");
+  input = input.replace(";", "-");
+  return input;
+}*/
+
+//http://stackoverflow.com/questions/2794137/sanitizing-user-input-before-adding-it-to-the-dom-in-javascript
+function sanitizeString(input) {
+    if (input==='') return '_';
+    return input.replace(/[^a-zA-Z0-9.-]/g, function(match) {
+        return '_'+match[0].charCodeAt(0).toString(16)+'_';
+    });
 }
 
 //recursive function to build the
@@ -293,8 +319,8 @@ function buildDivTree(node){
       }
       var buttonDiv = makeButtonsForTimemark(mark, node['name']);
       a.appendChild(document.createTextNode(hyperlink));
-      a.appendChild(buttonDiv);
       tmpLI.appendChild(a);
+      tmpLI.appendChild(buttonDiv);
       bodyList.appendChild(tmpLI);
     }
   }else{ //if this node is a folder, we need to get all of the sub elements and append those to this one
